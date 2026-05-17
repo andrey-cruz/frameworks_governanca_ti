@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análise Comparativa — COBIT 2019, ITIL 4 e ISO/IEC 38500 · UNISUL 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   TOKENS — Dark Academic Design System
+   ═══════════════════════════════════════ */
+:root {
+  --bg:    #07090F;
+  --surf:  #0C1020;
+  --card:  #111828;
+  --card2: #192035;
+  --b1: #2A3655;
+  --b2: #3D5080;
+  --t1: #FFFFFF;
+  --t2: #C8DAEE;
+  --t3: #8099C0;
+  --t4: #4A5F85;
+  --amber: #FFB020;
+  --ad: rgba(255,176,32,.10);
+  --ab: rgba(255,176,32,.35);
+  --blue:  #5B9CF8;
+  --bd: rgba(91,156,248,.10);
+  --bb: rgba(91,156,248,.35);
+  --green: #12D4A0;
+  --gd: rgba(18,212,160,.10);
+  --gb: rgba(18,212,160,.35);
+  --red: #FF5555;
+  --fn: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --r:  12px;
+  --r2:  7px;
+  --r3:  5px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--t2);
+  font-family: var(--fn);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Tipografia ── */
+h1 { font-size: clamp(32px,5vw,64px); font-weight: 800; color: var(--t1); letter-spacing: -.03em; line-height: .95; }
+h2 { font-size: clamp(22px,3vw,36px); font-weight: 800; color: var(--t1); letter-spacing: -.02em; line-height: 1.1; }
+h3 { font-size: clamp(16px,2vw,22px); font-weight: 700; color: var(--t1); letter-spacing: -.01em; line-height: 1.25; }
+h4 { font-size: 17px; font-weight: 700; color: var(--t1); }
+p  { color: var(--t2); line-height: 1.7; }
+
+.hi-b { color: var(--blue); }
+.hi-g { color: var(--green); }
+.hi-a { color: var(--amber); }
+
+.ey { font-size: 11px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; display: block; margin-bottom: 10px; }
+.ey-b { color: var(--blue); }
+.ey-g { color: var(--green); }
+.ey-a { color: var(--amber); }
+.ey-m { color: var(--t3); }
+
+/* ── Tags ── */
+.tag { display:inline-flex; align-items:center; padding:3px 10px; border-radius:var(--r3); font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; white-space:nowrap; }
+.tag-a { background:var(--ad); color:var(--amber); border:1px solid var(--ab); }
+.tag-b { background:var(--bd); color:var(--blue);  border:1px solid var(--bb); }
+.tag-g { background:var(--gd); color:var(--green); border:1px solid var(--gb); }
+.tag-r { background:rgba(255,85,85,.10); color:var(--red); border:1px solid rgba(255,85,85,.32); }
+.tag-m { background:rgba(255,255,255,.05); color:var(--t3); border:1px solid var(--b1); }
+
+/* ── Cards ── */
+.card  { background:var(--card);  border:1px solid var(--b1); border-radius:var(--r);  padding:24px 28px; }
+.card2 { background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); padding:16px 20px; }
+.card-accent-b { border-left:3px solid var(--blue);  }
+.card-accent-g { border-left:3px solid var(--green); }
+.card-accent-a { border-left:3px solid var(--amber); }
+.card-accent-r { border-left:3px solid var(--red);   }
+
+/* ── Acento de topo ── */
+.acc { position:relative; }
+.acc::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:var(--r) var(--r) 0 0; }
+.acc-b::before   { background:linear-gradient(90deg, var(--blue)  0%, transparent 60%); }
+.acc-g::before   { background:linear-gradient(90deg, var(--green) 0%, transparent 60%); }
+.acc-a::before   { background:linear-gradient(90deg, var(--amber) 0%, transparent 60%); }
+.acc-tri::before { background:linear-gradient(90deg, var(--amber) 0%, var(--blue) 50%, var(--green) 100%); }
+
+/* ── Grade de fundo ── */
+.grid-bg { position:relative; }
+.grid-bg::after {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image: linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);
+  background-size:80px 80px;
+}
+.grid-bg > * { position:relative; z-index:1; }
+
+/* ── Tabela ── */
+.tbl { width:100%; border-collapse:collapse; }
+.tbl th { padding:12px 14px; text-align:left; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; border-bottom:2px solid var(--b2); }
+.tbl th.col-a { color:var(--amber); }
+.tbl th.col-b { color:var(--blue);  }
+.tbl th.col-g { color:var(--green); }
+.tbl th.col-m { color:var(--t3);   }
+.tbl td { padding:11px 14px; font-size:14px; color:var(--t2); border-bottom:1px solid var(--b1); vertical-align:top; line-height:1.45; }
+.tbl tr:last-child td { border-bottom:none; }
+.tbl td.row-label { font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); width:18%; }
+.tbl td.va { color:var(--amber) !important; font-weight:700 !important; }
+.tbl td.vb { color:var(--blue)  !important; font-weight:700 !important; }
+.tbl td.vg { color:var(--green) !important; font-weight:700 !important; }
+.tbl td.vr { color:var(--red)   !important; font-style:italic; }
+
+/* ── Botão ── */
+.btn { display:inline-flex; align-items:center; gap:8px; padding:9px 18px; border-radius:var(--r2); font-family:var(--fn); font-size:13px; font-weight:700; cursor:pointer; border:none; transition:opacity .15s, background .15s; text-decoration:none; }
+.btn-b { background:var(--blue); color:#fff; }
+.btn-b:hover { opacity:.85; }
+.btn-ghost { background:transparent; color:var(--t2); border:1px solid var(--b2); }
+.btn-ghost:hover { background:var(--card2); color:var(--t1); }
+
+/* ── Layout utils ── */
+.flex { display:flex; }
+.col  { flex-direction:column; }
+.wrap { flex-wrap:wrap; }
+.gap-sm { gap:8px;  }
+.gap-md { gap:16px; }
+.gap-lg { gap:24px; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.mt-sm { margin-top:8px;  }
+.mt-md { margin-top:16px; }
+.mt-lg { margin-top:24px; }
+.mt-xl { margin-top:40px; }
+.mb-sm { margin-bottom:8px;  }
+.mb-md { margin-bottom:16px; }
+.mb-lg { margin-bottom:24px; }
+.mb-xl { margin-bottom:40px; }
+
+/* ═══════════════════════════════════════
+   LAYOUT GERAL
+   ═══════════════════════════════════════ */
+.page-wrap {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surf);
+  border-right: 1px solid var(--b1);
+  padding: 32px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--b2) transparent;
+}
+
+.sidebar-brand {
+  padding: 0 24px 28px;
+  border-bottom: 1px solid var(--b1);
+  margin-bottom: 24px;
+}
+.sidebar-brand .brand-uni { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--t4); margin-bottom: 6px; display: block; }
+.sidebar-brand .brand-title { font-size: 13px; font-weight: 700; color: var(--t2); line-height: 1.4; }
+
+.nav-section { margin-bottom: 20px; }
+.nav-section-label { font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--t4); padding: 0 24px; margin-bottom: 6px; display: block; }
+
+.nav-item {
+  display: block;
+  padding: 7px 24px;
+  font-size: 13px; font-weight: 500;
+  color: var(--t3);
+  text-decoration: none;
+  transition: color .15s, background .15s;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+.nav-item:hover { color: var(--t1); background: var(--card); }
+.nav-item.active { color: var(--t1); border-left-color: var(--blue); background: var(--bd); }
+.nav-item.nav-a.active { border-left-color: var(--amber); background: var(--ad); color: var(--amber); }
+.nav-item.nav-g.active { border-left-color: var(--green); background: var(--gd); color: var(--green); }
+.nav-item.nav-b.active { border-left-color: var(--blue);  background: var(--bd); color: var(--blue);  }
+
+.sidebar-tags { padding: 24px; border-top: 1px solid var(--b1); margin-top: 24px; display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── Conteúdo principal ── */
+.main-content { overflow: hidden; }
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 64px 72px;
+  border-bottom: 1px solid var(--b1);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -60px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(91,156,248,.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+.hero-title { margin-bottom: 20px; max-width: 700px; }
+.hero-sub { font-size: 18px; color: var(--t2); max-width: 620px; line-height: 1.6; margin-bottom: 32px; }
+.hero-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+.hero-meta-item { display: flex; flex-direction: column; gap: 3px; }
+.hero-meta-label { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--t4); }
+.hero-meta-val   { font-size: 14px; font-weight: 600; color: var(--t2); }
+
+/* ── Seções de conteúdo ── */
+.section {
+  padding: 64px;
+  border-bottom: 1px solid var(--b1);
+}
+.section-header { margin-bottom: 40px; }
+.section-number { font-size: 11px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--t4); margin-bottom: 10px; display: block; }
+
+/* Parágrafo padrão com espaço entre si */
+.prose p + p { margin-top: 16px; }
+
+/* ── Pirâmide de camadas ── */
+.layer-stack { display: flex; flex-direction: column; gap: 12px; }
+.layer {
+  border-radius: var(--r);
+  padding: 20px 24px;
+  border: 1px solid;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+}
+.layer-iso   { background: var(--ad); border-color: var(--ab); }
+.layer-cobit { background: var(--bd); border-color: var(--bb); }
+.layer-itil  { background: var(--gd); border-color: var(--gb); }
+
+.layer-badge {
+  font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: var(--r3);
+  white-space: nowrap;
+}
+.layer-iso   .layer-badge { background: var(--amber); color: #000; }
+.layer-cobit .layer-badge { background: var(--blue);  color: #fff; }
+.layer-itil  .layer-badge { background: var(--green); color: #000; }
+
+.layer-body h4 { margin-bottom: 4px; }
+.layer-body p  { font-size: 14px; color: var(--t3); margin: 0; line-height: 1.4; }
+
+.layer-role {
+  font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: var(--r3);
+  white-space: nowrap;
+}
+.layer-iso   .layer-role { color: var(--amber); background: rgba(255,176,32,.1); border: 1px solid var(--ab); }
+.layer-cobit .layer-role { color: var(--blue);  background: rgba(91,156,248,.1); border: 1px solid var(--bb); }
+.layer-itil  .layer-role { color: var(--green); background: rgba(18,212,160,.1); border: 1px solid var(--gb); }
+
+/* ── Cascata de objetivos ── */
+.cascade {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--b1);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.cascade-step {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  align-items: stretch;
+  border-bottom: 1px solid var(--b1);
+}
+.cascade-step:last-child { border-bottom: none; }
+.cascade-num {
+  background: var(--bd); color: var(--blue);
+  font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--b1);
+}
+.cascade-body { padding: 14px 20px; background: var(--card); }
+.cascade-label { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--t4); margin-bottom: 4px; }
+.cascade-val   { font-size: 15px; font-weight: 600; color: var(--t1); }
+.cascade-sub   { font-size: 13px; color: var(--t3); margin-top: 2px; }
+.cascade-arrow { text-align: center; padding: 6px; background: var(--surf); color: var(--b2); font-size: 14px; display: flex; align-items: center; justify-content: center; }
+
+/* ── Domínios COBIT ── */
+.domain-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.domain-card {
+  border-radius: var(--r2);
+  padding: 16px 14px;
+  border: 1px solid;
+  text-align: center;
+}
+.domain-gov  { background: var(--ad); border-color: var(--ab); }
+.domain-gest { background: var(--bd); border-color: var(--bb); }
+.domain-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.domain-gov  .domain-name { color: var(--amber); }
+.domain-gest .domain-name { color: var(--blue);  }
+.domain-full { font-size: 10px; color: var(--t3); font-weight: 600; line-height: 1.3; margin-bottom: 8px; }
+.domain-count { font-size: 24px; font-weight: 800; color: var(--t1); }
+.domain-sub   { font-size: 10px; color: var(--t4); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.domain-pdca  { font-size: 10px; font-weight: 800; margin-top: 6px; padding: 3px 6px; border-radius: 3px; display: inline-block; }
+.domain-gov  .domain-pdca { background: var(--ad); color: var(--amber); }
+.domain-gest .domain-pdca { background: var(--bd); color: var(--blue);  }
+
+/* ── Princípios lista ── */
+.principle-list { display: flex; flex-direction: column; gap: 8px; }
+.principle-item {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--card);
+  border: 1px solid var(--b1);
+  border-radius: var(--r2);
+  align-items: flex-start;
+}
+.principle-n {
+  font-size: 12px; font-weight: 800;
+  border-radius: 4px; padding: 4px 6px;
+  text-align: center;
+}
+.p-blue  .principle-n { background: var(--bd); color: var(--blue); border: 1px solid var(--bb); }
+.p-green .principle-n { background: var(--gd); color: var(--green); border: 1px solid var(--gb); }
+.p-amber .principle-n { background: var(--ad); color: var(--amber); border: 1px solid var(--ab); }
+.principle-title { font-size: 15px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
+.principle-desc  { font-size: 13px; color: var(--t3); line-height: 1.45; }
+
+/* ── SVS ── */
+.svs-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+.svs-item {
+  background: var(--card); border: 1px solid var(--b1);
+  border-radius: var(--r2); padding: 14px 12px; text-align: center;
+}
+.svs-item.svs-gov { background: var(--ad); border-color: var(--ab); }
+.svs-num { font-size: 10px; font-weight: 800; letter-spacing: .1em; color: var(--t4); margin-bottom: 6px; text-transform: uppercase; }
+.svs-name { font-size: 13px; font-weight: 700; color: var(--t1); line-height: 1.3; }
+.svs-gov .svs-name { color: var(--amber); }
+
+/* ── Práticas ITIL ── */
+.practices-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+.practice-card { background: var(--card); border: 1px solid var(--b1); border-radius: var(--r2); padding: 16px 18px; border-left: 3px solid var(--green); }
+.practice-title { font-size: 15px; font-weight: 700; color: var(--t1); margin-bottom: 6px; }
+.practice-desc { font-size: 13px; color: var(--t3); line-height: 1.45; }
+.practice-link { font-size: 11px; font-weight: 800; color: var(--blue); letter-spacing: .08em; margin-top: 8px; display: block; text-transform: uppercase; }
+
+/* ── Matriz comparativa expandida ── */
+.matrix-wrap { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--b1); }
+.matrix-wrap table { min-width: 700px; border-collapse: collapse; width: 100%; }
+.matrix-wrap th { padding: 14px 16px; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; border-bottom: 2px solid var(--b2); background: var(--surf); }
+.matrix-wrap th:first-child { color: var(--t3); width: 18%; }
+.matrix-wrap td { padding: 12px 16px; font-size: 14px; vertical-align: top; border-bottom: 1px solid var(--b1); line-height: 1.45; }
+.matrix-wrap tr:last-child td { border-bottom: none; }
+.matrix-wrap td:first-child { font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--t3); background: var(--surf); border-right: 1px solid var(--b1); }
+.matrix-wrap td.ca { color: var(--amber); font-weight: 600; }
+.matrix-wrap td.cb { color: var(--blue);  font-weight: 600; }
+.matrix-wrap td.cg { color: var(--green); font-weight: 600; }
+.matrix-wrap td.cr { color: var(--red); font-style: italic; }
+.matrix-wrap tr:nth-child(even) td { background: rgba(255,255,255,.015); }
+.matrix-wrap tr:nth-child(even) td:first-child { background: var(--surf); }
+
+/* ── Cenário de falha ── */
+.scenario-card { border: 1px solid var(--b1); border-radius: var(--r); overflow: hidden; }
+.scenario-header { padding: 14px 20px; border-bottom: 1px solid var(--b1); display: flex; align-items: center; gap: 12px; }
+.scenario-body { padding: 20px 20px; }
+.scenario-body p { font-size: 14px; line-height: 1.6; }
+
+/* ── Fluxo de conexão ── */
+.flow-chain {
+  display: flex; flex-direction: column; gap: 0;
+  border: 1px solid var(--b1); border-radius: var(--r); overflow: hidden;
+}
+.flow-step {
+  display: grid; grid-template-columns: 3px 1fr;
+  border-bottom: 1px solid var(--b1);
+}
+.flow-step:last-child { border-bottom: none; }
+.flow-bar { width: 100%; }
+.flow-bar-a { background: var(--amber); }
+.flow-bar-b { background: var(--blue);  }
+.flow-bar-g { background: var(--green); }
+.flow-content { padding: 16px 20px; background: var(--card); }
+.flow-fw { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 4px; }
+.flow-fw-a { color: var(--amber); }
+.flow-fw-b { color: var(--blue);  }
+.flow-fw-g { color: var(--green); }
+.flow-obj  { font-size: 15px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
+.flow-desc { font-size: 13px; color: var(--t3); line-height: 1.4; }
+
+/* ── Cenário prático ── */
+.scenario-steps { display: flex; flex-direction: column; gap: 12px; }
+.scenario-step { border: 1px solid var(--b1); border-radius: var(--r2); overflow: hidden; }
+.scenario-step-header { padding: 12px 18px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--b1); }
+.scenario-step-body { padding: 16px 18px; background: var(--card); }
+.scenario-step-body p { font-size: 14px; color: var(--t2); line-height: 1.6; }
+.scenario-step-a .scenario-step-header { background: var(--ad); }
+.scenario-step-b .scenario-step-header { background: var(--bd); }
+.scenario-step-g .scenario-step-header { background: var(--gd); }
+
+/* ── Referências ── */
+.ref-list { display: flex; flex-direction: column; gap: 12px; }
+.ref-item { background: var(--card); border: 1px solid var(--b1); border-radius: var(--r2); padding: 14px 18px; font-size: 14px; color: var(--t2); line-height: 1.55; }
+.ref-item strong { color: var(--t1); }
+
+/* ── Footer ── */
+.site-footer {
+  padding: 40px 64px;
+  background: var(--surf);
+  border-top: 1px solid var(--b1);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.footer-copy { font-size: 13px; color: var(--t4); line-height: 1.5; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .page-wrap { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; }
+  .section, .hero { padding: 40px 32px; }
+  .domain-grid { grid-template-columns: repeat(3,1fr); }
+  .svs-grid { grid-template-columns: repeat(3,1fr); }
+}
+@media (max-width: 680px) {
+  .section, .hero { padding: 32px 20px; }
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .domain-grid { grid-template-columns: repeat(2,1fr); }
+  .practices-grid { grid-template-columns: 1fr; }
+  .layer { grid-template-columns: 1fr; gap: 10px; }
+  .layer-role { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-uni">UNISUL · 2026 · SI</span>
+      <div class="brand-title">Governança e Serviços de TI</div>
+    </div>
+
+    <nav>
+      <div class="nav-section">
+        <span class="nav-section-label">Introdução</span>
+        <a class="nav-item active" href="#s1">1. Introdução e Contextualização</a>
+        <a class="nav-item" href="#s2">2. Referencial Teórico</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">Frameworks</span>
+        <a class="nav-item nav-b" href="#s3">3. COBIT 2019</a>
+        <a class="nav-item nav-g" href="#s4">4. ITIL 4</a>
+        <a class="nav-item nav-a" href="#s5">5. ISO/IEC 38500</a>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">Análise</span>
+        <a class="nav-item" href="#s6">6. Análise Comparativa</a>
+        <a class="nav-item" href="#s7">7. Modelo de Integração</a>
+        <a class="nav-item" href="#s8">8. Conclusão</a>
+        <a class="nav-item" href="#s9">9. Referências</a>
+      </div>
+    </nav>
+
+    <div class="sidebar-tags">
+      <span class="tag tag-a">ISO 38500</span>
+      <span class="tag tag-b">COBIT 2019</span>
+      <span class="tag tag-g">ITIL 4</span>
+    </div>
+  </aside>
+
+  <!-- ═══════ CONTEÚDO PRINCIPAL ═══════ -->
+  <main class="main-content">
+
+    <!-- HERO -->
+    <header class="hero grid-bg" id="s1">
+      <div class="hero-eyebrow">
+        <span class="tag tag-m">Avaliação A3</span>
+        <span class="tag tag-b">Documento Técnico</span>
+        <span class="tag tag-m">Governança e Serviços de TI</span>
+      </div>
+      <h1 class="hero-title">
+        Análise Comparativa e<br>
+        <span class="hi-b">Complementaridade</span> dos<br>
+        Frameworks de TI
+      </h1>
+      <p class="hero-sub">Implementação integrada do <span class="hi-b">COBIT 2019</span>, <span class="hi-g">ITIL 4</span> e <span class="hi-a">ISO/IEC 38500</span> nas organizações — como os três operam em camadas complementares para construir uma governança de ponta a ponta.</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Integrantes</span>
+          <span class="hero-meta-val">6 membros</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Professor</span>
+          <span class="hero-meta-val">Leandro Pereira</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Curso</span>
+          <span class="hero-meta-val">Sistemas de Informação</span>
+        </div>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Semestre</span>
+          <span class="hero-meta-val">5º · 2026/1</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- SEÇÃO 1 — INTRODUÇÃO -->
+    <section class="section">
+      <div class="section-header">
+        <span class="section-number">Seção 01</span>
+        <h2>Introdução e Contextualização</h2>
+      </div>
+
+      <div class="grid-3 mb-lg">
+        <div class="card card-accent-b acc acc-b">
+          <span class="ey ey-b">Anos 60–80</span>
+          <h4>Era do CPD</h4>
+          <p style="font-size:14px;margin-top:6px;">TI como caixa-preta. Mainframes centralizados, controles rígidos, distância total do negócio.</p>
+        </div>
+        <div class="card card-accent-b acc acc-b">
+          <span class="ey ey-b">Anos 80–90</span>
+          <h4>Descentralização</h4>
+          <p style="font-size:14px;margin-top:6px;">PCs disseminam TI, criam ilhas de automação, custos ocultos e riscos sem controle.</p>
+        </div>
+        <div class="card card-accent-b acc acc-b">
+          <span class="ey ey-b">Anos 90–hoje</span>
+          <h4>TI Estratégica</h4>
+          <p style="font-size:14px;margin-top:6px;">Internet torna sistemas mission-critical. ERPs integram o negócio. Governança se torna essencial.</p>
+        </div>
+      </div>
+
+      <div class="prose mb-lg">
+        <p>A trajetória da Tecnologia da Informação atravessou três fases que moldaram a necessidade contemporânea de governança. Na era do Centro de Processamento de Dados (CPD), entre os anos 1960 e 1980, a TI era percebida como custo operacional — uma caixa-preta afastada das decisões estratégicas. A disseminação dos computadores pessoais nos anos 1980–90 descentralizou recursos, mas criou "ilhas de automação" sem padronização, dados duplicados e riscos de segurança crescentes (MOLINARO; RAMOS, 2011).</p>
+        <p>O catalisador regulatório foi o escândalo da Enron em 2001. Fraudes contábeis realizadas via manipulação de sistemas de TI expuseram a ausência sistemática de controles internos. A Lei Sarbanes-Oxley (SOX) de 2002 obrigou empresas com ações na bolsa norte-americana a demonstrar Controles Gerais de TI auditáveis — desde gestão de acesso até rastreabilidade de mudanças em sistemas financeiros.</p>
+      </div>
+
+      <div class="card acc acc-tri mb-lg">
+        <span class="ey ey-m">O Problema Central</span>
+        <h3 style="margin-bottom:12px;">O gap estratégico que os três frameworks resolvem</h3>
+        <p>Como garantir que a TI, em <strong style="color:var(--t1)">todos os seus níveis organizacionais</strong>, opere de forma alinhada, controlada e orientada à criação de valor? A <span style="color:var(--amber);font-weight:700">ISO/IEC 38500</span> responde no nível do conselho diretivo; o <span style="color:var(--blue);font-weight:700">COBIT 2019</span> no nível tático de governança e gestão; e o <span style="color:var(--green);font-weight:700">ITIL 4</span> no nível operacional de execução de serviços.</p>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h4 style="margin-bottom:10px;">Objetivo Geral</h4>
+          <p style="font-size:14px;">Analisar a complementaridade entre COBIT 2019, ITIL 4 e ISO/IEC 38500:2015, demonstrando que a robustez de um sistema de governança advém da integração coerente dos três em camadas organizacionais distintas.</p>
+        </div>
+        <div>
+          <h4 style="margin-bottom:10px;">Metodologia</h4>
+          <p style="font-size:14px;">Abordagem exploratório-descritiva de cunho bibliográfico e qualitativo. Fontes: manuais oficiais da ISACA, AXELOS e norma ISO/IEC 38500:2015, complementados por Fernandes e Abreu (2014), Molinaro e Ramos (2011) e Freitas (2013).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 2 — REFERENCIAL TEÓRICO -->
+    <section class="section" id="s2">
+      <div class="section-header">
+        <span class="section-number">Seção 02</span>
+        <h2>Referencial Teórico Comum</h2>
+      </div>
+
+      <div class="grid-2 mb-xl">
+        <div class="card card-accent-b">
+          <span class="ey ey-b">Governança de TI</span>
+          <h4 style="margin-bottom:10px;">Avaliar · Dirigir · Monitorar</h4>
+          <p style="font-size:14px;">Responsabilidade do <strong style="color:var(--t1)">corpo diretivo</strong> — conselho e alta diretoria. Estabelece o rumo, define prioridades e monitora conformidade. Não executa.</p>
+        </div>
+        <div class="card card-accent-g">
+          <span class="ey ey-g">Gestão de TI</span>
+          <h4 style="margin-bottom:10px;">Planejar · Construir · Executar · Monitorar</h4>
+          <p style="font-size:14px;">Responsabilidade dos <strong style="color:var(--t1)">executivos</strong> — CIO, gestores e equipes técnicas. Operacionaliza as diretrizes da governança.</p>
+        </div>
+      </div>
+
+      <div class="card2 mb-lg" style="border-color:var(--red);">
+        <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:6px;">⚠ Erro Comum</span>
+        <p style="font-size:14px;">Confundir governança com gestão gera comitês que micro-gerenciam operações ou equipes que tomam decisões estratégicas sem mandato. O COBIT 2019 é o único framework que formaliza essa separação com precisão.</p>
+      </div>
+
+      <h3 style="margin-bottom:20px;">Os 5 Pilares da Governança de TI</h3>
+      <div class="grid-3">
+        <div class="card">
+          <span style="font-size:24px;font-weight:800;color:var(--blue);display:block;margin-bottom:6px;">01</span>
+          <h4 style="margin-bottom:6px;">Alinhamento Estratégico</h4>
+          <p style="font-size:13px;color:var(--t3);">Iniciativas de TI conectadas aos objetivos do negócio. Sem alinhamento, a TI é custo; com ele, é vantagem competitiva.</p>
+        </div>
+        <div class="card">
+          <span style="font-size:24px;font-weight:800;color:var(--blue);display:block;margin-bottom:6px;">02</span>
+          <h4 style="margin-bottom:6px;">Entrega de Valor</h4>
+          <p style="font-size:13px;color:var(--t3);">Garantir que os investimentos em TI entreguem os benefícios esperados com foco em resultados tangíveis.</p>
+        </div>
+        <div class="card">
+          <span style="font-size:24px;font-weight:800;color:var(--blue);display:block;margin-bottom:6px;">03</span>
+          <h4 style="margin-bottom:6px;">Gerenciamento de Riscos</h4>
+          <p style="font-size:13px;color:var(--t3);">Estrutura de identificação, análise e tratamento dos riscos tecnológicos, regulatórios e de continuidade.</p>
+        </div>
+        <div class="card">
+          <span style="font-size:24px;font-weight:800;color:var(--blue);display:block;margin-bottom:6px;">04</span>
+          <h4 style="margin-bottom:6px;">Gestão de Recursos</h4>
+          <p style="font-size:13px;color:var(--t3);">Otimização de pessoas, orçamento, infraestrutura e informação para que estejam onde o negócio precisa.</p>
+        </div>
+        <div class="card">
+          <span style="font-size:24px;font-weight:800;color:var(--blue);display:block;margin-bottom:6px;">05</span>
+          <h4 style="margin-bottom:6px;">Medição de Desempenho</h4>
+          <p style="font-size:13px;color:var(--t3);">KPIs e métricas que reportam a performance à diretoria e permitem avaliar se as metas estão sendo alcançadas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 3 — COBIT 2019 -->
+    <section class="section acc acc-b" id="s3">
+      <div class="section-header">
+        <span class="ey ey-b">Core Framework — COBIT 2019</span>
+        <span class="section-number">Seção 03</span>
+        <h2>COBIT 2019 <span class="hi-b">·</span> ISACA</h2>
+      </div>
+
+      <!-- Evolução histórica -->
+      <h3 style="margin-bottom:16px;">3.1 Evolução Histórica</h3>
+      <div class="cascade mb-xl">
+        <div class="cascade-step">
+          <div class="cascade-num">96</div>
+          <div class="cascade-body">
+            <div class="cascade-label">COBIT 1 — 1996</div>
+            <div class="cascade-val">Auditoria Financeira</div>
+            <div class="cascade-sub">4 domínios. Foco em controles para auditores. TI era "caixa-preta".</div>
+          </div>
+        </div>
+        <div class="cascade-step">
+          <div class="cascade-num">00</div>
+          <div class="cascade-body">
+            <div class="cascade-label">COBIT 3 — 2000</div>
+            <div class="cascade-val">Gestão de TI</div>
+            <div class="cascade-sub">Introduz métricas de gerenciamento e modelo de maturidade (influência CMMI).</div>
+          </div>
+        </div>
+        <div class="cascade-step">
+          <div class="cascade-num">07</div>
+          <div class="cascade-body">
+            <div class="cascade-label">COBIT 4.1 — 2007</div>
+            <div class="cascade-val">34 Processos de TI</div>
+            <div class="cascade-sub">Framework mais popular de gestão. Forte foco em alinhamento TI-negócio.</div>
+          </div>
+        </div>
+        <div class="cascade-step">
+          <div class="cascade-num">12</div>
+          <div class="cascade-body">
+            <div class="cascade-label">COBIT 5 — 2012</div>
+            <div class="cascade-val">Governança Corporativa de TI (GEIT)</div>
+            <div class="cascade-sub">Maior revolução: responsabilidade da TI passa a ser do conselho. Integra ITIL, ISOs, TOGAF.</div>
+          </div>
+        </div>
+        <div class="cascade-step">
+          <div class="cascade-num" style="background:var(--blue);color:#fff;">19</div>
+          <div class="cascade-body">
+            <div class="cascade-label">COBIT 2019 — Versão Atual</div>
+            <div class="cascade-val" style="color:var(--blue);">Flexibilidade e Customização</div>
+            <div class="cascade-sub">Fatores de Desenho, separação princípios sistema/framework, 40 objetivos atualizados.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 Princípios -->
+      <h3 style="margin-bottom:16px;">3.2 Os 6 Princípios do Sistema de Governança</h3>
+      <div class="principle-list mb-xl">
+        <div class="principle-item p-blue">
+          <div class="principle-n">01</div>
+          <div>
+            <div class="principle-title">Fornecer Valor às Partes Interessadas</div>
+            <div class="principle-desc">Equilíbrio triplo: realização de benefícios, otimização de riscos e otimização de recursos. Acionistas, clientes, reguladores e colaboradores são os stakeholders.</div>
+          </div>
+        </div>
+        <div class="principle-item p-blue">
+          <div class="principle-n">02</div>
+          <div>
+            <div class="principle-title">Abordagem Holística</div>
+            <div class="principle-desc">Sete componentes interdependentes: princípios e políticas; processos; estruturas organizacionais; cultura e comportamento; informação; serviços e aplicações; pessoas e competências.</div>
+          </div>
+        </div>
+        <div class="principle-item p-blue">
+          <div class="principle-n">03</div>
+          <div>
+            <div class="principle-title">Sistema Dinâmico</div>
+            <div class="principle-desc">O sistema de governança deve ser reavaliado sempre que Fatores de Desenho mudam — nova estratégia, nova regulamentação, novas tecnologias (IA, Cloud, DevOps).</div>
+          </div>
+        </div>
+        <div class="principle-item p-blue">
+          <div class="principle-n">04</div>
+          <div>
+            <div class="principle-title">Governança Distinta da Gestão</div>
+            <div class="principle-desc">O corpo diretivo governa (EDM); a gerência executiva gere (APO, BAI, DSS, MEA). Única formalização explícita dessa separação entre todos os frameworks de mercado.</div>
+          </div>
+        </div>
+        <div class="principle-item p-blue">
+          <div class="principle-n">05</div>
+          <div>
+            <div class="principle-title">Adaptado às Necessidades da Empresa</div>
+            <div class="principle-desc">Não existe "COBIT de prateleira". Os 11 Fatores de Desenho calibram quais objetivos são prioritários para o perfil de risco, tamanho e estratégia de cada organização.</div>
+          </div>
+        </div>
+        <div class="principle-item p-blue">
+          <div class="principle-n">06</div>
+          <div>
+            <div class="principle-title">Sistema de Ponta a Ponta (End-to-End)</div>
+            <div class="principle-desc">A responsabilidade sobre o valor e o risco da tecnologia não é exclusiva do CIO — é de toda a liderança executiva. TI é parte integrante do negócio.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cascata de Objetivos -->
+      <h3 style="margin-bottom:16px;">3.3 Cascata de Objetivos</h3>
+      <div class="card mb-xl">
+        <p style="font-size:14px;margin-bottom:20px;">O mecanismo que traduz necessidades abstratas dos stakeholders em processos operacionais concretos de TI, criando linha de visibilidade direta do board ao analista.</p>
+        <div class="cascade">
+          <div class="cascade-step">
+            <div class="cascade-num" style="background:rgba(255,176,32,.15);color:var(--amber);">①</div>
+            <div class="cascade-body">
+              <div class="cascade-label">Necessidade do Stakeholder</div>
+              <div class="cascade-val">Acionistas exigem crescimento sustentável da receita</div>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-num" style="background:rgba(91,156,248,.15);color:var(--blue);">②</div>
+            <div class="cascade-body">
+              <div class="cascade-label">Meta Corporativa — Enterprise Goal</div>
+              <div class="cascade-val">EG01 — Portfólio de Produtos e Serviços Competitivos</div>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-num" style="background:rgba(91,156,248,.15);color:var(--blue);">③</div>
+            <div class="cascade-body">
+              <div class="cascade-label">Meta de Alinhamento — Alignment Goal</div>
+              <div class="cascade-val">AG05 — Entrega de serviços de TI de acordo com os requisitos do negócio</div>
+            </div>
+          </div>
+          <div class="cascade-step">
+            <div class="cascade-num" style="background:rgba(18,212,160,.15);color:var(--green);">④</div>
+            <div class="cascade-body">
+              <div class="cascade-label">Objetivo de Gestão COBIT</div>
+              <div class="cascade-val" style="color:var(--green);">APO09 — Gerenciar Acordos de Nível de Serviço (SLAs)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Os 5 Domínios -->
+      <h3 style="margin-bottom:16px;">3.4 Os 5 Domínios e os 40 Objetivos de Controle</h3>
+      <div class="domain-grid mb-xl">
+        <div class="domain-card domain-gov">
+          <div class="domain-name">EDM</div>
+          <div class="domain-full">Avaliar, Dirigir e Monitorar</div>
+          <div class="domain-count">5</div>
+          <div class="domain-sub">objetivos</div>
+          <div class="domain-pdca">Governança</div>
+        </div>
+        <div class="domain-card domain-gest">
+          <div class="domain-name">APO</div>
+          <div class="domain-full">Alinhar, Planejar e Organizar</div>
+          <div class="domain-count">14</div>
+          <div class="domain-sub">objetivos</div>
+          <div class="domain-pdca">Plan</div>
+        </div>
+        <div class="domain-card domain-gest">
+          <div class="domain-name">BAI</div>
+          <div class="domain-full">Construir, Adquirir e Implementar</div>
+          <div class="domain-count">11</div>
+          <div class="domain-sub">objetivos</div>
+          <div class="domain-pdca">Do</div>
+        </div>
+        <div class="domain-card domain-gest">
+          <div class="domain-name">DSS</div>
+          <div class="domain-full">Entregar, Servir e Suportar</div>
+          <div class="domain-count">6</div>
+          <div class="domain-sub">objetivos</div>
+          <div class="domain-pdca">Do / Run</div>
+        </div>
+        <div class="domain-card domain-gest">
+          <div class="domain-name">MEA</div>
+          <div class="domain-full">Monitorar, Avaliar e Analisar</div>
+          <div class="domain-count">4</div>
+          <div class="domain-sub">objetivos</div>
+          <div class="domain-pdca">Check &amp; Act</div>
+        </div>
+      </div>
+
+      <div class="card2">
+        <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);display:block;margin-bottom:8px;">COBIT como Framework Integrador</span>
+        <p style="font-size:14px;">O COBIT se posiciona como "guarda-chuva" intencional — não entra no detalhe operacional. O Princípio 3 do Framework — "Alinhado aos Principais Padrões" — formaliza a integração com ITIL, ISO 27001, TOGAF e outros. O COBIT define o <em>quê controlar</em>; os frameworks especialistas definem o <em>como executar</em>.</p>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 4 — ITIL 4 -->
+    <section class="section acc acc-g" id="s4">
+      <div class="section-header">
+        <span class="ey ey-g">Core Framework — ITIL 4</span>
+        <span class="section-number">Seção 04</span>
+        <h2>ITIL 4 <span class="hi-g">·</span> AXELOS</h2>
+      </div>
+
+      <div class="prose mb-lg">
+        <p>O ITIL nasceu nos anos 1980 como iniciativa do governo britânico (CCTA) para padronizar práticas de TI. O ITIL 4 (2019) representou uma mudança de paradigma: abandono da visão de "entrega de serviços" em favor da <strong style="color:var(--t1)">co-criação de valor</strong>. O valor não é algo que a TI entrega — é algo que provedores e consumidores criam juntos. O ITIL 4 incorporou formalmente conceitos de Agile, DevOps e Lean (AXELOS, 2019).</p>
+      </div>
+
+      <!-- 4 Dimensões -->
+      <h3 style="margin-bottom:16px;">4.2 As 4 Dimensões da Gestão de Serviços</h3>
+      <div class="grid-2 mb-xl">
+        <div class="card card-accent-g">
+          <span class="ey ey-g">Dimensão 1</span>
+          <h4 style="margin-bottom:6px;">Organizações e Pessoas</h4>
+          <p style="font-size:14px;">Cultura organizacional, papéis, responsabilidades e competências. Uma equipe tecnicamente excelente com cultura de silos entrega serviços abaixo do potencial.</p>
+        </div>
+        <div class="card card-accent-g">
+          <span class="ey ey-g">Dimensão 2</span>
+          <h4 style="margin-bottom:6px;">Informação e Tecnologia</h4>
+          <p style="font-size:14px;">Dados gerenciados (base de conhecimento, CMDB) e tecnologias de suporte (ferramentas ITSM, plataformas de nuvem, sistemas de monitoramento).</p>
+        </div>
+        <div class="card card-accent-g">
+          <span class="ey ey-g">Dimensão 3</span>
+          <h4 style="margin-bottom:6px;">Parceiros e Fornecedores</h4>
+          <p style="font-size:14px;">Ecossistema de organizações que contribuem para a entrega dos serviços. Gestão inadequada de fornecedores pode comprometer SLAs e continuidade operacional.</p>
+        </div>
+        <div class="card card-accent-g">
+          <span class="ey ey-g">Dimensão 4</span>
+          <h4 style="margin-bottom:6px;">Fluxos de Valor e Processos</h4>
+          <p style="font-size:14px;">Como as partes da organização trabalham de forma integrada. Um fluxo de valor é a série de etapas que transforma uma demanda em valor entregue ao consumidor.</p>
+        </div>
+      </div>
+
+      <!-- 7 Princípios -->
+      <h3 style="margin-bottom:16px;">4.3 Os 7 Princípios Orientadores</h3>
+      <div class="principle-list mb-xl">
+        <div class="principle-item p-green">
+          <div class="principle-n">P1</div>
+          <div>
+            <div class="principle-title">Focar no Valor</div>
+            <div class="principle-desc">Tudo que a organização faz deve gerar valor para clientes e partes interessadas. "Como isso cria valor?" deve ser a primeira pergunta de qualquer iniciativa.</div>
+          </div>
+        </div>
+        <div class="principle-item p-green">
+          <div class="principle-n">P2</div>
+          <div>
+            <div class="principle-title">Começar Onde Você Está</div>
+            <div class="principle-desc">Não parta do zero sem avaliar o que já existe. Processos, ferramentas e relatórios existentes são ativos — eliminá-los sem critério é desperdício.</div>
+          </div>
+        </div>
+        <div class="principle-item p-green">
+          <div class="principle-n">P3</div>
+          <div>
+            <div class="principle-title">Progredir Iterativamente com Feedback</div>
+            <div class="principle-desc">Divida grandes iniciativas em iterações menores. Entregue valor mais cedo e colete feedback a cada ciclo. Reflexo direto da influência do Agile e Lean.</div>
+          </div>
+        </div>
+        <div class="principle-item p-green">
+          <div class="principle-n">P4</div>
+          <div>
+            <div class="principle-title">Colaborar e Promover a Visibilidade</div>
+            <div class="principle-desc">Quebre os silos. O trabalho deve ser visível para todas as partes. Colaboração requer confiança, e confiança requer visibilidade.</div>
+          </div>
+        </div>
+        <div class="principle-item p-green">
+          <div class="principle-n">P5</div>
+          <div>
+            <div class="principle-title">Pensar e Trabalhar Holisticamente</div>
+            <div class="principle-desc">Nenhuma parte funciona isoladamente. Otimizar uma parte sem considerar o impacto no todo pode gerar resultados piores do que o estado anterior.</div>
+          </div>
+        </div>
+        <div class="principle-item p-green">
+          <div class="principle-n">P6</div>
+          <div>
+            <div class="principle-title">Manter a Simplicidade e a Praticidade</div>
+            <div class="principle-desc">Use o número mínimo de etapas para atingir um objetivo. Pensamento Lean: se um processo tem dez aprovações, questione se todas são necessárias.</div>
+          </div>
+        </div>
+        <div class="principle-item p-green">
+          <div class="principle-n">P7</div>
+          <div>
+            <div class="principle-title">Otimizar e Automatizar</div>
+            <div class="principle-desc">Otimize o processo antes de automatizá-lo. A intervenção humana deve ocorrer apenas onde agrega valor real. Automatizar um processo ruim produz resultados ruins mais rapidamente.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVS -->
+      <h3 style="margin-bottom:16px;">4.4 O Sistema de Valor de Serviço (SVS)</h3>
+      <div class="card mb-xl">
+        <p style="font-size:14px;margin-bottom:16px;">O SVS descreve como todos os componentes de uma organização trabalham como <strong style="color:var(--t1)">sistema</strong> para co-criar valor. Entrada: <em>Oportunidades e Demandas</em>. Saída: <span style="color:var(--green);font-weight:700">Valor</span>.</p>
+        <div class="svs-grid">
+          <div class="svs-item">
+            <div class="svs-num">01</div>
+            <div class="svs-name">Cadeia de Valor de Serviço (SVC)</div>
+          </div>
+          <div class="svs-item">
+            <div class="svs-num">02</div>
+            <div class="svs-name">34 Práticas de Gerenciamento</div>
+          </div>
+          <div class="svs-item">
+            <div class="svs-num">03</div>
+            <div class="svs-name">7 Princípios Orientadores</div>
+          </div>
+          <div class="svs-item svs-gov">
+            <div class="svs-num">04</div>
+            <div class="svs-name">Governança (EDM)</div>
+          </div>
+          <div class="svs-item">
+            <div class="svs-num">05</div>
+            <div class="svs-name">Melhoria Contínua</div>
+          </div>
+        </div>
+        <div class="card2 mt-md" style="border-color:var(--ab);">
+          <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:6px;">🔗 Conexão com COBIT</span>
+          <p style="font-size:14px;">A presença explícita do componente <strong style="color:var(--t1)">"Governança"</strong> no núcleo do SVS é a ponte intencional de integração com o COBIT — sua definição é diretamente alinhada ao domínio EDM (Avaliar, Dirigir, Monitorar).</p>
+        </div>
+      </div>
+
+      <!-- Práticas essenciais -->
+      <h3 style="margin-bottom:16px;">4.6 Práticas Essenciais</h3>
+      <div class="practices-grid">
+        <div class="practice-card">
+          <div class="practice-title">Central de Serviços (Service Desk)</div>
+          <div class="practice-desc">Ponto de contato único entre usuários e TI. Recebe, registra, prioriza e encaminha todos os contatos — incidentes, requisições, dúvidas.</div>
+        </div>
+        <div class="practice-card">
+          <div class="practice-title">Gestão de Incidentes</div>
+          <div class="practice-desc">Restaura a operação normal o mais rápido possível. Minimiza o impacto no negócio.</div>
+          <span class="practice-link">↔ DSS02 COBIT</span>
+        </div>
+        <div class="practice-card">
+          <div class="practice-title">Gestão de Problemas</div>
+          <div class="practice-desc">Identifica e elimina causas raiz de incidentes recorrentes. Três modos: reativo, proativo e gerenciamento de erros conhecidos.</div>
+        </div>
+        <div class="practice-card">
+          <div class="practice-title">Controle de Mudanças</div>
+          <div class="practice-desc">Garante que alterações em sistemas sejam avaliadas, aprovadas e implementadas de forma controlada, minimizando novas interrupções.</div>
+          <span class="practice-link">↔ BAI06 COBIT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 5 — ISO/IEC 38500 -->
+    <section class="section acc acc-a" id="s5">
+      <div class="section-header">
+        <span class="ey ey-a">Core Framework — ISO/IEC 38500</span>
+        <span class="section-number">Seção 05</span>
+        <h2>ISO/IEC 38500 <span class="hi-a">·</span> Board-Level</h2>
+      </div>
+
+      <div class="card mb-lg" style="background:var(--ad);border-color:var(--ab);">
+        <span style="font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);display:block;margin-bottom:8px;">Design Intencional</span>
+        <p style="font-size:15px;line-height:1.65;">A ISO/IEC 38500 é uma norma de <strong style="color:var(--t1)">princípios de alto nível</strong>, desprovida intencionalmente de processos operacionais, fluxogramas ou catálogos de controle. Seu público-alvo é o <strong style="color:var(--amber)">Conselho de Administração (board)</strong> e a Alta Diretoria — não o staff técnico. A ausência de processos não é limitação — é escolha de design deliberada.</p>
+      </div>
+
+      <!-- 6 Princípios -->
+      <h3 style="margin-bottom:16px;">5.2 Os 6 Princípios Orientadores</h3>
+      <div class="principle-list mb-xl">
+        <div class="principle-item p-amber">
+          <div class="principle-n">R</div>
+          <div>
+            <div class="principle-title">Responsabilidade (Responsibility)</div>
+            <div class="principle-desc">Indivíduos e grupos entendem e aceitam suas responsabilidades no fornecimento e demanda de TI. Quem demanda responde pelo resultado; quem fornece responde pela qualidade.</div>
+          </div>
+        </div>
+        <div class="principle-item p-amber">
+          <div class="principle-n">S</div>
+          <div>
+            <div class="principle-title">Estratégia (Strategy)</div>
+            <div class="principle-desc">A estratégia de negócio considera as capacidades atuais e futuras de TI. Os planos de TI satisfazem as necessidades da estratégia. A TI é parte constituinte da estratégia — não complemento.</div>
+          </div>
+        </div>
+        <div class="principle-item p-amber">
+          <div class="principle-n">A</div>
+          <div>
+            <div class="principle-title">Aquisição (Acquisition)</div>
+            <div class="principle-desc">Aquisições de TI são feitas por razões válidas, com análise de custo-benefício adequada, balanceando riscos e benefícios no curto e no longo prazo. Transparência e accountability nas decisões.</div>
+          </div>
+        </div>
+        <div class="principle-item p-amber">
+          <div class="principle-n">D</div>
+          <div>
+            <div class="principle-title">Desempenho (Performance)</div>
+            <div class="principle-desc">A TI apoia o propósito da organização, suportando-a para atingir objetivos e respondendo às necessidades presentes e futuras do negócio.</div>
+          </div>
+        </div>
+        <div class="principle-item p-amber">
+          <div class="principle-n">C</div>
+          <div>
+            <div class="principle-title">Conformidade (Conformance)</div>
+            <div class="principle-desc">A TI cumpre todas as legislações e regulamentações aplicáveis. O board deve conhecer as obrigações regulatórias de TI — LGPD, SOX, PCI-DSS — e garantir estruturas para o cumprimento.</div>
+          </div>
+        </div>
+        <div class="principle-item p-amber">
+          <div class="principle-n">H</div>
+          <div>
+            <div class="principle-title">Comportamento Humano (Human Behavior)</div>
+            <div class="principle-desc">Políticas e decisões de TI demonstram respeito pelo comportamento humano, incluindo necessidades atuais e emergentes de todas as pessoas no processo.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ciclo EDM -->
+      <h3 style="margin-bottom:16px;">5.3 O Ciclo Avaliar → Dirigir → Monitorar (EDM)</h3>
+      <div class="grid-3 mb-xl">
+        <div class="card" style="background:var(--ad);border-color:var(--ab);text-align:center;">
+          <div style="font-size:32px;font-weight:800;color:var(--amber);margin-bottom:8px;">E</div>
+          <h4 style="margin-bottom:6px;">Avaliar</h4>
+          <p style="font-size:13px;color:var(--t3);">Board avalia uso atual e futuro da TI, estratégias, propostas e riscos. Recebe relatórios gerenciais como insumo.</p>
+        </div>
+        <div class="card" style="background:var(--ad);border-color:var(--ab);text-align:center;">
+          <div style="font-size:32px;font-weight:800;color:var(--amber);margin-bottom:8px;">D</div>
+          <h4 style="margin-bottom:6px;">Dirigir</h4>
+          <p style="font-size:13px;color:var(--t3);">Board publica políticas e diretrizes que orientam a gestão executiva. Define o que é aceitável, prioritário e proibido — sem descer ao "como".</p>
+        </div>
+        <div class="card" style="background:var(--ad);border-color:var(--ab);text-align:center;">
+          <div style="font-size:32px;font-weight:800;color:var(--amber);margin-bottom:8px;">M</div>
+          <h4 style="margin-bottom:6px;">Monitorar</h4>
+          <p style="font-size:13px;color:var(--t3);">Board monitora o desempenho via KPIs reportados pela gestão. Verifica conformidade, performance e realização de benefícios.</p>
+        </div>
+      </div>
+
+      <div class="card2" style="border-color:var(--bb);">
+        <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:8px;">🔗 Conexão com COBIT 2019</span>
+        <p style="font-size:14px;">O domínio de governança do COBIT denomina-se <strong style="color:var(--blue)">EDM — Evaluate, Direct and Monitor</strong> — exatamente a mesma nomenclatura da ISO 38500. Não é coincidência: é decisão de design da ISACA para demonstrar alinhamento explícito. A diferença é de profundidade: a ISO define o modelo em princípios abstratos; o COBIT o operacionaliza em 5 objetivos de controle mensuráveis (EDM01 a EDM05).</p>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 6 — ANÁLISE COMPARATIVA -->
+    <section class="section" id="s6">
+      <div class="section-header">
+        <span class="section-number">Seção 06</span>
+        <h2>Análise Comparativa e <span class="hi-b">Matriz</span> de Complementaridade</h2>
+      </div>
+
+      <p class="mb-lg">A comparação multidimensional é necessária para demonstrar que os três frameworks não competem entre si — atuam em camadas organizacionais distintas com propósitos complementares. Sete critérios cobrem as dimensões essenciais de diferenciação.</p>
+
+      <!-- Matriz -->
+      <div class="matrix-wrap mb-xl">
+        <table>
+          <thead>
+            <tr>
+              <th>Critério</th>
+              <th style="color:var(--amber);">ISO/IEC 38500:2015</th>
+              <th style="color:var(--blue);">COBIT 2019 (ISACA)</th>
+              <th style="color:var(--green);">ITIL 4 (AXELOS)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Foco Principal</td>
+              <td class="ca">Governança corporativa de TI — o que esperar</td>
+              <td class="cb">Governança e gestão via objetivos de controle</td>
+              <td class="cg">Gerenciamento de serviços e co-criação de valor</td>
+            </tr>
+            <tr>
+              <td>Público-Alvo</td>
+              <td>Conselho de Administração, CEO, Alta Diretoria</td>
+              <td>CIO, auditores internos, gestores de TI</td>
+              <td>Equipes de TI, service managers, analistas de suporte</td>
+            </tr>
+            <tr>
+              <td>Nível de Detalhe</td>
+              <td>Baixo — apenas diretrizes e princípios</td>
+              <td>Alto — 40 objetivos, práticas e KPIs</td>
+              <td>Alto — 34 práticas, SVC com 6 atividades</td>
+            </tr>
+            <tr>
+              <td>Abordagem</td>
+              <td>6 princípios éticos e estratégicos</td>
+              <td>Processos de controle auditáveis e mensuráveis</td>
+              <td>Práticas orientadas a valor, iteração e feedback</td>
+            </tr>
+            <tr>
+              <td>Estrutura</td>
+              <td>Ciclo EDM: Avaliar, Dirigir, Monitorar</td>
+              <td>5 domínios: EDM (5) + APO (14) + BAI (11) + DSS (6) + MEA (4)</td>
+              <td>SVS + SVC (6 atividades) + 34 práticas de gerenciamento</td>
+            </tr>
+            <tr>
+              <td>Certificação</td>
+              <td style="color:var(--t4);">Não possui certificação profissional</td>
+              <td>ISACA: Foundation, Design, Implementation</td>
+              <td>PeopleCert: Foundation, Managing Professional, Strategic Leader</td>
+            </tr>
+            <tr>
+              <td>Lacuna se Isolado</td>
+              <td class="cr">Sem processos, métricas ou guias operacionais</td>
+              <td class="cr">Não detalha execução de serviços no campo</td>
+              <td class="cr">Sem elo estratégico com objetivos do board</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Sobreposições -->
+      <h3 style="margin-bottom:16px;">6.3 Sobreposições e Lacunas Estruturais</h3>
+      <div class="grid-2 mb-xl">
+        <div class="card card-accent-b">
+          <span class="ey ey-b">Sobreposição Principal</span>
+          <h4 style="margin-bottom:8px;">DSS (COBIT) ↔ ITIL Operacional</h4>
+          <p style="font-size:14px;">O domínio DSS do COBIT e as práticas de Entrega e Suporte do ITIL convergem na gestão de operações de serviço, incidentes e continuidade. A diferença é de profundidade: COBIT define objetivos e indicadores; ITIL fornece o guia detalhado de execução.</p>
+        </div>
+        <div class="card card-accent-a">
+          <span class="ey ey-a">Lacuna Crítica</span>
+          <h4 style="margin-bottom:8px;">ISO 38500 ↔ ITIL sem intermediário</h4>
+          <p style="font-size:14px;">Sem o COBIT como camada tática intermediária, não há mecanismo que traduza as diretrizes do conselho em objetivos de controle mensuráveis que orientem a operação. O gap entre princípios abstratos e práticas técnicas permanece sem ponte.</p>
+        </div>
+      </div>
+
+      <!-- Cenários de falha -->
+      <h3 style="margin-bottom:16px;">6.4 Cenários de Falha na Adoção Isolada</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="scenario-card">
+          <div class="scenario-header" style="background:rgba(18,212,160,.08);">
+            <span class="tag tag-g">Apenas ITIL 4</span>
+            <span style="font-size:14px;font-weight:700;color:var(--t1);">Excelência operacional sem direção estratégica</span>
+          </div>
+          <div class="scenario-body">
+            <p>A equipe de TI desenvolve excelência operacional. SLAs cumpridos, satisfação alta. Mas o CFO não tem indicadores que demonstrem retorno sobre investimento. O board não tem visibilidade sobre riscos. Quando a empresa precisa cortar custos, a TI é vulnerável por não conseguir demonstrar valor estratégico.</p>
+          </div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-header" style="background:rgba(91,156,248,.08);">
+            <span class="tag tag-b">Apenas COBIT 2019</span>
+            <span style="font-size:14px;font-weight:700;color:var(--t1);">Controles perfeitos sem guia operacional</span>
+          </div>
+          <div class="scenario-body">
+            <p>Auditorias impecáveis, dashboards de controle detalhados, objetivos formalmente definidos. Mas a equipe não sabe como tratar um incidente crítico fora do horário comercial — não há guia de escalada. Uma mudança sem procedimento formal causa quatro horas de interrupção. O COBIT definiu os objetivos; ninguém sabia como executá-los.</p>
+          </div>
+        </div>
+        <div class="scenario-card">
+          <div class="scenario-header" style="background:rgba(255,176,32,.08);">
+            <span class="tag tag-a">Apenas ISO 38500</span>
+            <span style="font-size:14px;font-weight:700;color:var(--t1);">Política excelente, nenhuma mudança concreta</span>
+          </div>
+          <div class="scenario-body">
+            <p>O board aprova uma política robusta de governança baseada nos seis princípios. O documento é excelente. Mas não há processos, indicadores nem práticas. A política permanece no papel. As equipes continuam trabalhando como sempre. Governança existe no nível de princípios éticos, mas não se traduz em nenhuma mudança operacional.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 7 — INTEGRAÇÃO -->
+    <section class="section acc acc-tri" id="s7">
+      <div class="section-header">
+        <span class="section-number">Seção 07</span>
+        <h2>Modelo de <span class="hi-b">Integração</span> Complementar</h2>
+      </div>
+
+      <!-- Pirâmide de camadas -->
+      <h3 style="margin-bottom:16px;">7.1 O Modelo de Camadas Organizacionais</h3>
+      <div class="layer-stack mb-xl">
+        <div class="layer layer-iso">
+          <span class="layer-badge">ISO/IEC 38500</span>
+          <div class="layer-body">
+            <h4 style="color:var(--amber);">Camada Estratégico-Diretiva</h4>
+            <p>O board define <em>o porquê e o que esperar</em>. Avalia, dirige e monitora. Não executa. Pergunta: "Que valor esperamos da TI e quais riscos aceitamos?"</p>
+          </div>
+          <span class="layer-role">Board · CEO</span>
+        </div>
+        <div class="layer layer-cobit">
+          <span class="layer-badge">COBIT 2019</span>
+          <div class="layer-body">
+            <h4 style="color:var(--blue);">Camada Tático-Controladora</h4>
+            <p>O CIO traduz em <em>o que controlar e mensurar</em>. A Cascata de Objetivos operacionaliza as metas corporativas em 40 objetivos de controle mensuráveis.</p>
+          </div>
+          <span class="layer-role">CIO · Auditores</span>
+        </div>
+        <div class="layer layer-itil">
+          <span class="layer-badge">ITIL 4</span>
+          <div class="layer-body">
+            <h4 style="color:var(--green);">Camada Operacional-Executora</h4>
+            <p>As equipes executam <em>como fazer com eficiência</em>. 34 práticas e a Cadeia de Valor de Serviço guiam a operação cotidiana dos serviços de TI.</p>
+          </div>
+          <span class="layer-role">Staff · Técnicos</span>
+        </div>
+      </div>
+
+      <!-- Fluxos de conexão -->
+      <h3 style="margin-bottom:16px;">7.2 Fluxos Dinâmicos de Conexão</h3>
+      <div class="grid-2 mb-xl">
+        <div>
+          <div class="card2 mb-md" style="padding:12px 16px;">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);">Trilha A — Desempenho</span>
+          </div>
+          <div class="flow-chain">
+            <div class="flow-step">
+              <div class="flow-bar flow-bar-a"></div>
+              <div class="flow-content">
+                <div class="flow-fw flow-fw-a">ISO 38500</div>
+                <div class="flow-obj">Princípio de Desempenho</div>
+                <div class="flow-desc">Board exige que TI suporte e responda às necessidades organizacionais.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="flow-bar flow-bar-b"></div>
+              <div class="flow-content">
+                <div class="flow-fw flow-fw-b">COBIT 2019</div>
+                <div class="flow-obj">EDM02 — Garantir Realização de Benefícios</div>
+                <div class="flow-desc">Comitê de TI define metas de entrega de valor e processos de controle relevantes.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="flow-bar flow-bar-g"></div>
+              <div class="flow-content">
+                <div class="flow-fw flow-fw-g">ITIL 4</div>
+                <div class="flow-obj">Gestão de Nível de Serviço</div>
+                <div class="flow-desc">Equipe negocia, define e monitora SLAs que garantem valor entregue e medido.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card2 mb-md" style="padding:12px 16px;">
+            <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);">Trilha B — Conformidade</span>
+          </div>
+          <div class="flow-chain">
+            <div class="flow-step">
+              <div class="flow-bar flow-bar-a"></div>
+              <div class="flow-content">
+                <div class="flow-fw flow-fw-a">ISO 38500</div>
+                <div class="flow-obj">Princípio de Conformidade</div>
+                <div class="flow-desc">Board determina que TI cumpra LGPD, SOX e regulamentações aplicáveis.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="flow-bar flow-bar-b"></div>
+              <div class="flow-content">
+                <div class="flow-fw flow-fw-b">COBIT 2019</div>
+                <div class="flow-obj">MEA03 — Gerenciar Conformidade Externa</div>
+                <div class="flow-desc">Gestor de compliance mapeia requisitos regulatórios e define controles necessários.</div>
+              </div>
+            </div>
+            <div class="flow-step">
+              <div class="flow-bar flow-bar-g"></div>
+              <div class="flow-content">
+                <div class="flow-fw flow-fw-g">ITIL 4</div>
+                <div class="flow-obj">Controle de Mudanças · Gestão de Ativos</div>
+                <div class="flow-desc">Equipes implementam logs de acesso, rastreabilidade e controles técnicos que sustentam a conformidade.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cenário prático -->
+      <h3 style="margin-bottom:16px;">7.3 Cenário Prático — Software House em Florianópolis</h3>
+      <div class="card2 mb-md">
+        <span style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);">Contexto</span>
+        <p style="font-size:14px;margin-top:6px;">Software house de médio porte, 150 funcionários. Busca fechar contrato com banco internacional que exige práticas formais de governança de TI, conformidade com LGPD e processos de gestão de incidentes documentados.</p>
+      </div>
+      <div class="scenario-steps">
+        <div class="scenario-step scenario-step-a">
+          <div class="scenario-step-header">
+            <span class="tag tag-a">Etapa 1</span>
+            <span style="font-size:14px;font-weight:700;color:var(--t1);">Conselho de Administração — ISO/IEC 38500</span>
+          </div>
+          <div class="scenario-step-body">
+            <p>Com base nos Princípios de Conformidade e Estratégia da ISO 38500, o board aprova resolução formal de comprometimento com a governança de TI. Emite diretriz: <em>"A TI deve demonstrar controles auditáveis e práticas de gestão de riscos formalizadas."</em> Define como meta estratégica a obtenção do contrato com o banco.</p>
+          </div>
+        </div>
+        <div class="scenario-step scenario-step-b">
+          <div class="scenario-step-header">
+            <span class="tag tag-b">Etapa 2</span>
+            <span style="font-size:14px;font-weight:700;color:var(--t1);">Comitê de TI — COBIT 2019</span>
+          </div>
+          <div class="scenario-step-body">
+            <p>O CIO recebe a diretriz e aciona a Cascata de Objetivos: Meta Corporativa EG04 (Conformidade e Transparência) → Metas de Alinhamento AG10 e AG11 → Objetivos APO12 (Gerenciar Riscos) e APO13 (Gerenciar Segurança). Os Fatores de Desenho calibram o escopo: médio porte, setor financeiro, LGPD. Um plano com KPIs e prazos é apresentado ao board.</p>
+          </div>
+        </div>
+        <div class="scenario-step scenario-step-g">
+          <div class="scenario-step-header">
+            <span class="tag tag-g">Etapa 3</span>
+            <span style="font-size:14px;font-weight:700;color:var(--t1);">Equipes Operacionais — ITIL 4</span>
+          </div>
+          <div class="scenario-step-body">
+            <p>Com objetivos e indicadores definidos pelo COBIT, as equipes implementam: Central de Serviços reestruturada com registro formal de todos os chamados; Gestão de Incidentes com fluxos de escalada e SLAs por severidade; Controle de Mudanças com aprovação formal para sistemas que tratam dados pessoais (requisito LGPD). Os três frameworks atuaram harmonicamente: board deu direção, CIO traduziu em controles, equipes executaram.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 8 — CONCLUSÃO -->
+    <section class="section" id="s8">
+      <div class="section-header">
+        <span class="section-number">Seção 08</span>
+        <h2>Conclusão e Síntese do Projeto</h2>
+      </div>
+
+      <div class="card acc acc-tri mb-xl">
+        <span class="ey ey-m">Tese Central</span>
+        <h3 style="margin-bottom:12px;">A robustez não advém da escolha do melhor framework — advém da <span class="hi-b">sabedoria em integrá-los</span>.</h3>
+        <p>A governança bem-sucedida protege o valor do acionista na mesma medida em que empodera o analista de suporte em seu cotidiano operacional. Frameworks de governança não são burocracia corporativa — são estruturas que conectam propósito e execução, estratégia e operação, board e equipe técnica, de forma coerente e auditável.</p>
+      </div>
+
+      <h3 style="margin-bottom:16px;">Descobertas Consolidadas</h3>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:40px;">
+        <div class="card card-accent-b" style="padding:14px 18px;">
+          <p style="font-size:14px;"><span style="color:var(--blue);font-weight:800;">01 ·</span> Os três frameworks operam em níveis organizacionais distintos e não-concorrentes: ISO 38500 no estratégico-diretivo, COBIT 2019 no tático-controlador e ITIL 4 no operacional-executor.</p>
+        </div>
+        <div class="card card-accent-b" style="padding:14px 18px;">
+          <p style="font-size:14px;"><span style="color:var(--blue);font-weight:800;">02 ·</span> O domínio EDM do COBIT é espelho operacional do modelo EDM da ISO 38500 — mesma nomenclatura, alinhamento intencional, hierarquia de desdobramento.</p>
+        </div>
+        <div class="card card-accent-g" style="padding:14px 18px;">
+          <p style="font-size:14px;"><span style="color:var(--green);font-weight:800;">03 ·</span> A presença do componente "Governança" no núcleo do SVS do ITIL 4 demonstra que o framework foi desenhado para operar sob diretrizes de governança superior — ponte intencional com o COBIT e a ISO 38500.</p>
+        </div>
+        <div class="card card-accent-b" style="padding:14px 18px;">
+          <p style="font-size:14px;"><span style="color:var(--blue);font-weight:800;">04 ·</span> A Cascata de Objetivos do COBIT é o mecanismo de tradução estratégica que conecta as necessidades dos stakeholders às práticas operacionais do ITIL, através de metas corporativas, metas de alinhamento e objetivos de gestão.</p>
+        </div>
+        <div class="card card-accent-r" style="padding:14px 18px;">
+          <p style="font-size:14px;"><span style="color:var(--red);font-weight:800;">05 ·</span> A adoção isolada de qualquer um dos três produz lacunas críticas. Sem ISO 38500: excelência operacional sem direção. Sem COBIT: o board não tem indicadores. Sem ITIL: objetivos de controle sem execução prática.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="card" style="text-align:center;border-top:3px solid var(--amber);">
+          <div style="font-size:28px;font-weight:800;color:var(--amber);margin-bottom:8px;">ISO</div>
+          <p style="font-size:13px;color:var(--t3);">Define o <em>porquê</em> e o <em>que esperar</em>. Sem processo, sem execução — mas a âncora estratégica do sistema.</p>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--blue);">
+          <div style="font-size:28px;font-weight:800;color:var(--blue);margin-bottom:8px;">COBIT</div>
+          <p style="font-size:13px;color:var(--t3);">Traduz em <em>o que controlar</em>. Liga o board à operação. Sem ele, a ponte estratégica-operacional não existe.</p>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--green);">
+          <div style="font-size:28px;font-weight:800;color:var(--green);margin-bottom:8px;">ITIL</div>
+          <p style="font-size:13px;color:var(--t3);">Especifica o <em>como executar</em>. Sem ele, os objetivos de controle ficam no papel.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEÇÃO 9 — REFERÊNCIAS -->
+    <section class="section" id="s9">
+      <div class="section-header">
+        <span class="section-number">Seção 09</span>
+        <h2>Referências Bibliográficas</h2>
+      </div>
+      <p style="font-size:13px;color:var(--t4);margin-bottom:24px;">Formatadas conforme NBR 6023 (ABNT).</p>
+      <div class="ref-list">
+        <div class="ref-item"><strong>AXELOS.</strong> ITIL Foundation: ITIL 4 Edition. Norwich: TSO, 2019.</div>
+        <div class="ref-item"><strong>DAY, G. S.; SCHOEMAKER, P. J. H.; GUNTHER, R. E.</strong> Gestão de tecnologias emergentes. Porto Alegre: Bookman, 2003.</div>
+        <div class="ref-item"><strong>FERNANDES, A. A.; ABREU, V. F.</strong> Implantando a Governança de TI: da estratégia à gestão de processos e serviços. 4. ed. Rio de Janeiro: Brasport, 2014.</div>
+        <div class="ref-item"><strong>FOGGETTI, C.</strong> (org.). Gestão Ágil de Projetos. São Paulo: Education do Brasil, 2014.</div>
+        <div class="ref-item"><strong>FREITAS, M. A. S.</strong> Fundamentos do gerenciamento de serviços de TI. 2. ed. Rio de Janeiro: Brasport, 2013.</div>
+        <div class="ref-item"><strong>ISACA.</strong> COBIT 2019 Framework: Introduction and Methodology. Rolling Meadows: ISACA, 2018.</div>
+        <div class="ref-item"><strong>ISO/IEC 38500:2015.</strong> Information technology — Governance of IT for the organization. Geneva: ISO, 2015.</div>
+        <div class="ref-item"><strong>MOLINARO, L. F. R.; RAMOS, K. H. C.</strong> Gestão de tecnologia da informação: governança de TI. Rio de Janeiro: LTC, 2011.</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-copy">
+        <div style="margin-bottom:4px;font-weight:600;color:var(--t3);">Governança e Serviços de TI · UNISUL 2026</div>
+        Amanda Paulino · Andrey Cruz · João Bittar · Kamily Curcio · Murilo Schaefer · Nickolas Abad<br>
+        Prof. Leandro Pereira · 5º Sem. Sistemas de Informação
+      </div>
+      <div class="flex gap-sm wrap">
+        <span class="tag tag-a">ISO 38500</span>
+        <span class="tag tag-b">COBIT 2019</span>
+        <span class="tag tag-g">ITIL 4</span>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+// ── Active nav link ao rolar ────────────────────────────────────────────────
+const sections = document.querySelectorAll('section[id], header[id]');
+const navLinks  = document.querySelectorAll('.nav-item');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.25 });
+
+sections.forEach(s => observer.observe(s));
+
+// ── Smooth scroll em links da sidebar ─────────────────────────────────────
+navLinks.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
