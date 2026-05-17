@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guia do Projeto A3 — Governança de TI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+
+<style id="ds">
+:root {
+  --bg:    #07090F;
+  --surf:  #0C1020;
+  --card:  #111828;
+  --card2: #192035;
+  --b1: #2A3655;
+  --b2: #3D5080;
+  --t1: #FFFFFF;
+  --t2: #C8DAEE;
+  --t3: #8099C0;
+  --t4: #4A5F85;
+  --amber: #FFB020;
+  --ad: rgba(255,176,32,.13);
+  --ab: rgba(255,176,32,.38);
+  --blue:  #5B9CF8;
+  --bd: rgba(91,156,248,.13);
+  --bb: rgba(91,156,248,.38);
+  --green: #12D4A0;
+  --gd: rgba(18,212,160,.13);
+  --gb: rgba(18,212,160,.38);
+  --red: #FF5555;
+  --fn: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --r:  12px;
+  --r2:  7px;
+  --r3:  5px;
+  --sh1: 0 1px 3px rgba(0,0,0,.4);
+  --sh2: 0 4px 16px rgba(0,0,0,.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--t2);
+  font-family: var(--fn);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ey { font-size: 12px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; display: block; margin-bottom: 8px; }
+.ey-b { color: var(--blue); }
+.ey-g { color: var(--green); }
+.ey-a { color: var(--amber); }
+.ey-m { color: var(--t3); }
+.ey-r { color: var(--red); }
+
+h1, .h1 { font-size: clamp(32px, 5vw, 64px); font-weight: 800; color: var(--t1); letter-spacing: -.03em; line-height: .95; }
+h2, .h2 { font-size: clamp(22px, 3vw, 40px); font-weight: 800; color: var(--t1); letter-spacing: -.02em; line-height: 1.05; }
+h3, .h3 { font-size: clamp(17px, 2.2vw, 24px); font-weight: 700; color: var(--t1); letter-spacing: -.01em; line-height: 1.2; }
+h4, .h4 { font-size: 17px; font-weight: 700; color: var(--t1); }
+
+.hi-b { color: var(--blue); }
+.hi-g { color: var(--green); }
+.hi-a { color: var(--amber); }
+
+p, .body { font-size: 16px; color: var(--t2); line-height: 1.65; }
+.body-sm  { font-size: 14px; color: var(--t2); line-height: 1.55; }
+.body-lg  { font-size: 18px; color: var(--t2); line-height: 1.6; }
+.muted    { color: var(--t3); }
+.hint     { color: var(--t4); font-size: 13px; }
+
+.sec-label { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--t3); margin-bottom: 12px; display: block; }
+
+.tag { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: var(--r3); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.tag-a { background: var(--ad); color: var(--amber); border: 1px solid var(--ab); }
+.tag-b { background: var(--bd); color: var(--blue);  border: 1px solid var(--bb); }
+.tag-g { background: var(--gd); color: var(--green); border: 1px solid var(--gb); }
+.tag-r { background: rgba(255,85,85,.12); color: var(--red); border: 1px solid rgba(255,85,85,.35); }
+.tag-m { background: rgba(255,255,255,.06); color: var(--t3); border: 1px solid var(--b1); }
+
+.dot-a { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); display: inline-block; flex-shrink: 0; }
+.dot-b { width: 8px; height: 8px; border-radius: 50%; background: var(--blue);  display: inline-block; flex-shrink: 0; }
+.dot-g { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; flex-shrink: 0; }
+
+.card { background: var(--card); border: 1px solid var(--b1); border-radius: var(--r); padding: 24px 28px; }
+.card2 { background: var(--card2); border: 1px solid var(--b2); border-radius: var(--r2); padding: 16px 20px; }
+.card-accent-b { border-left: 3px solid var(--blue); }
+.card-accent-g { border-left: 3px solid var(--green); }
+.card-accent-a { border-left: 3px solid var(--amber); }
+.card-accent-r { border-left: 3px solid var(--red); }
+.card-tint-b { background: var(--bd); border-color: var(--bb); }
+.card-tint-g { background: var(--gd); border-color: var(--gb); }
+.card-tint-a { background: var(--ad); border-color: var(--ab); }
+
+.fw-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--b1); border-radius: 14px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+.fw-card:hover { transform: translateY(-3px); box-shadow: var(--sh2); }
+.fw-card-stripe { height: 5px; width: 100%; }
+.fw-card-body   { padding: 28px 32px 20px; flex: 1; }
+.fw-card-footer { padding: 16px 32px; border-top: 1px solid var(--b1); background: var(--surf); display: flex; align-items: center; justify-content: space-between; }
+
+.item-list { display: flex; flex-direction: column; gap: 8px; }
+.item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 18px; background: var(--card); border: 1px solid var(--b1); border-radius: var(--r2); transition: border-color .2s; }
+.item:hover { border-color: var(--b2); }
+.item-num { font-size: 12px; font-weight: 800; letter-spacing: .1em; flex-shrink: 0; padding: 4px 8px; border-radius: 4px; margin-top: 1px; }
+.item-num-b { background: var(--bd); color: var(--blue); border: 1px solid var(--bb); }
+.item-num-g { background: var(--gd); color: var(--green); border: 1px solid var(--gb); }
+.item-num-a { background: var(--ad); color: var(--amber); border: 1px solid var(--ab); }
+.item-title { font-size: 17px; font-weight: 700; color: var(--t1); margin-bottom: 4px; }
+.item-desc  { font-size: 14px; color: var(--t2); line-height: 1.5; }
+
+.item-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--card); border: 1px solid var(--b1); border-radius: var(--r2); }
+.item-row-n { font-size: 12px; font-weight: 800; min-width: 22px; }
+.item-row-t { font-size: 15px; font-weight: 500; color: var(--t1); }
+
+.item-accent { padding: 16px 20px; background: var(--card); border: 1px solid var(--b1); border-radius: var(--r2); }
+.item-accent-b { border-left: 3px solid var(--blue); }
+.item-accent-g { border-left: 3px solid var(--green); }
+.item-accent-a { border-left: 3px solid var(--amber); }
+.item-accent .ia-label { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 5px; }
+.item-accent .ia-val   { font-size: 15px; font-weight: 600; color: var(--t1); line-height: 1.3; }
+
+.panel { background: var(--surf); border: 1px solid var(--b1); border-radius: var(--r); padding: 28px 32px; }
+
+.note { padding: 16px 20px; background: var(--card2); border: 1px solid var(--b2); border-radius: var(--r2); }
+.note-label { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--t3); margin-bottom: 8px; display: block; }
+.note-text  { font-size: 14px; color: var(--t2); line-height: 1.55; }
+.note-text strong { font-weight: 700; }
+.note-text strong.nb { color: var(--blue); }
+.note-text strong.ng { color: var(--green); }
+.note-text strong.na { color: var(--amber); }
+
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; border-bottom: 2px solid var(--b2); }
+.tbl th.col-a { color: var(--amber); }
+.tbl th.col-b { color: var(--blue); }
+.tbl th.col-g { color: var(--green); }
+.tbl th.col-m { color: var(--t3); }
+.tbl td { padding: 11px 16px; font-size: 14px; color: var(--t2); border-bottom: 1px solid var(--b1); vertical-align: top; line-height: 1.45; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl td.row-label { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--t3); white-space: nowrap; }
+.tbl td.va { color: var(--amber) !important; font-weight: 700 !important; }
+.tbl td.vb { color: var(--blue)  !important; font-weight: 700 !important; }
+.tbl td.vg { color: var(--green) !important; font-weight: 700 !important; }
+.tbl td.vr { color: var(--red)   !important; }
+
+.acc { position: relative; }
+.acc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: var(--r) var(--r) 0 0; }
+.acc-b::before { background: linear-gradient(90deg, var(--blue) 0%, transparent 60%); }
+.acc-g::before { background: linear-gradient(90deg, var(--green) 0%, transparent 60%); }
+.acc-a::before { background: linear-gradient(90deg, var(--amber) 0%, transparent 60%); }
+.acc-tri::before { background: linear-gradient(90deg, var(--amber) 0%, var(--blue) 50%, var(--green) 100%); }
+
+.grid-bg { position: relative; }
+.grid-bg::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.016) 1px, transparent 1px); background-size: 80px 80px; z-index: 0; }
+.grid-bg > * { position: relative; z-index: 1; }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--r2); font-family: var(--fn); font-size: 14px; font-weight: 700; cursor: pointer; border: none; transition: background .15s, opacity .15s; text-decoration: none; white-space: nowrap; }
+.btn-b { background: var(--blue); color: #fff; }
+.btn-b:hover { opacity: .85; }
+.btn-ghost { background: transparent; color: var(--t2); border: 1px solid var(--b2); }
+.btn-ghost:hover { background: var(--card2); color: var(--t1); }
+.btn-sm { padding: 7px 14px; font-size: 13px; }
+
+.flex  { display: flex; }
+.col   { flex-direction: column; }
+.row   { flex-direction: row; }
+.center { align-items: center; justify-content: center; }
+.gap-sm { gap: 8px; }
+.gap-md { gap: 16px; }
+.gap-lg { gap: 24px; }
+.gap-xl { gap: 40px; }
+
+.divider { height: 1px; background: var(--b1); margin: 20px 0; }
+
+.mt-sm { margin-top: 8px; }
+.mt-md { margin-top: 16px; }
+.mt-lg { margin-top: 24px; }
+.mt-xl { margin-top: 40px; }
+.mb-sm { margin-bottom: 8px; }
+.mb-md { margin-bottom: 16px; }
+.mb-lg { margin-bottom: 24px; }
+.mb-xl { margin-bottom: 40px; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+@media (max-width: 900px) {
+  .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+
+<style>
+/* ═══ PAGE LAYOUT ═══ */
+body { padding: 0; }
+
+.page-wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 100px; }
+
+/* ═══ NAV ═══ */
+.topnav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(7,9,15,.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--b1);
+  padding: 0 24px;
+}
+.topnav-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; gap: 12px;
+}
+.topnav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; font-weight: 800; color: var(--t1);
+  text-decoration: none; white-space: nowrap;
+}
+.topnav-brand svg { color: var(--blue); }
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-link {
+  padding: 6px 12px; border-radius: var(--r3);
+  font-size: 13px; font-weight: 600; color: var(--t3);
+  text-decoration: none; white-space: nowrap;
+  transition: color .15s, background .15s;
+}
+.nav-link:hover { color: var(--t1); background: var(--card2); }
+.nav-link.active { color: var(--blue); background: var(--bd); }
+
+/* ═══ HERO ═══ */
+.hero {
+  padding: 72px 0 60px;
+  border-bottom: 1px solid var(--b1);
+  margin-bottom: 64px;
+  position: relative; overflow: hidden;
+}
+.hero-bg-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 50% at 60% 40%, rgba(91,156,248,.07) 0%, transparent 70%);
+}
+.hero-meta {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.hero h1 { margin-bottom: 16px; }
+.hero-sub { font-size: 18px; color: var(--t3); max-width: 640px; margin-bottom: 32px; line-height: 1.6; }
+.hero-stats {
+  display: flex; gap: 32px; flex-wrap: wrap;
+  padding-top: 32px; border-top: 1px solid var(--b1);
+}
+.stat-item { display: flex; flex-direction: column; gap: 3px; }
+.stat-val { font-size: 28px; font-weight: 800; color: var(--t1); letter-spacing: -.03em; }
+.stat-lbl { font-size: 12px; font-weight: 600; color: var(--t4); letter-spacing: .08em; text-transform: uppercase; }
+
+/* ═══ SECTION HEADER ═══ */
+.section-block { margin-bottom: 80px; }
+
+.section-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; margin-bottom: 32px;
+  padding-bottom: 20px; border-bottom: 1px solid var(--b1);
+}
+.section-num {
+  font-size: 12px; font-weight: 800; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--t4);
+  padding: 4px 10px; border: 1px solid var(--b1);
+  border-radius: var(--r3); background: var(--card2);
+  white-space: nowrap; margin-top: 4px;
+}
+
+/* ═══ MEMBER CARDS ═══ */
+.member-card {
+  background: var(--card); border: 1px solid var(--b1);
+  border-radius: 14px; overflow: hidden;
+  transition: transform .2s, box-shadow .2s;
+}
+.member-card:hover { transform: translateY(-3px); box-shadow: var(--sh2); }
+
+.member-header {
+  padding: 24px 28px 20px;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.member-id {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800; flex-shrink: 0;
+}
+.member-id.m1 { background: var(--bd); color: var(--blue); border: 2px solid var(--bb); }
+.member-id.m2 { background: var(--bd); color: var(--blue); border: 2px solid var(--bb); }
+.member-id.m3 { background: var(--gd); color: var(--green); border: 2px solid var(--gb); }
+.member-id.m4 { background: var(--ad); color: var(--amber); border: 2px solid var(--ab); }
+.member-id.m5 { background: rgba(91,156,248,.2); color: var(--blue); border: 2px solid var(--bb); }
+.member-id.m6 { background: var(--gd); color: var(--green); border: 2px solid var(--gb); }
+
+.member-role { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--t4); margin-bottom: 5px; }
+.member-name { font-size: 17px; font-weight: 800; color: var(--t1); margin-bottom: 4px; }
+.member-subtitle { font-size: 13px; color: var(--t3); }
+
+.member-body { padding: 0 28px 24px; }
+.member-section { margin-bottom: 16px; }
+.member-section-title {
+  font-size: 11px; font-weight: 800; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--t4);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.member-section-title svg { opacity: .7; }
+
+.concept-pill {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; margin: 3px 3px 3px 0;
+  border-radius: 20px; font-size: 12px; font-weight: 600;
+  background: var(--card2); border: 1px solid var(--b1);
+  color: var(--t2); line-height: 1;
+}
+
+.member-footer {
+  padding: 14px 28px;
+  background: var(--surf); border-top: 1px solid var(--b1);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.time-badge {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 700; color: var(--t3);
+}
+.time-badge svg { flex-shrink: 0; }
+
+.stripe-b { height: 4px; background: var(--blue); }
+.stripe-g { height: 4px; background: var(--green); }
+.stripe-a { height: 4px; background: var(--amber); }
+.stripe-tri { height: 4px; background: linear-gradient(90deg, var(--amber), var(--blue), var(--green)); }
+
+/* ═══ TIMELINE ═══ */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item {
+  display: grid; grid-template-columns: 100px 1fr;
+  gap: 0; position: relative;
+}
+.tl-item::before {
+  content: ''; position: absolute;
+  left: 99px; top: 0; bottom: 0;
+  width: 1px; background: var(--b1);
+}
+.tl-left {
+  padding: 20px 24px 20px 0;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+}
+.tl-week { font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--t4); }
+.tl-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid var(--b1); background: var(--card2);
+  margin-right: -6px; margin-top: 3px; flex-shrink: 0;
+  position: relative; z-index: 1;
+  transition: background .2s, border-color .2s;
+}
+.tl-dot.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 8px rgba(91,156,248,.5); }
+.tl-right {
+  padding: 20px 0 20px 28px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.tl-title { font-size: 15px; font-weight: 700; color: var(--t1); }
+.tl-desc { font-size: 13px; color: var(--t3); }
+.tl-resp { display: flex; gap: 4px; flex-wrap: wrap; }
+.tl-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.tl-tag-b { background: var(--bd); color: var(--blue); border: 1px solid var(--bb); }
+.tl-tag-a { background: var(--ad); color: var(--amber); border: 1px solid var(--ab); }
+.tl-tag-g { background: var(--gd); color: var(--green); border: 1px solid var(--gb); }
+.tl-tag-m { background: rgba(255,255,255,.05); color: var(--t3); border: 1px solid var(--b1); }
+
+/* ═══ PRESENTATION SLOT ═══ */
+.slot-row {
+  display: grid; grid-template-columns: 60px 1fr auto;
+  gap: 12px; align-items: start;
+  padding: 14px 0; border-bottom: 1px solid var(--b1);
+}
+.slot-row:last-child { border-bottom: none; }
+.slot-num { font-size: 22px; font-weight: 800; color: var(--t4); text-align: right; line-height: 1; padding-top: 2px; }
+.slot-content { display: flex; flex-direction: column; gap: 4px; }
+.slot-who { font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.slot-topic { font-size: 15px; font-weight: 600; color: var(--t1); }
+.slot-time { font-size: 13px; font-weight: 800; color: var(--t3); white-space: nowrap; padding-top: 4px; }
+
+/* ═══ QA CARDS ═══ */
+.qa-item {
+  border: 1px solid var(--b1); border-radius: var(--r2);
+  overflow: hidden; margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.qa-item:hover { border-color: var(--b2); }
+.qa-q {
+  padding: 16px 20px;
+  display: flex; align-items: flex-start; gap: 14px;
+  cursor: pointer; user-select: none;
+  background: var(--card);
+}
+.qa-q-icon { color: var(--blue); flex-shrink: 0; margin-top: 1px; }
+.qa-q-text { font-size: 15px; font-weight: 700; color: var(--t1); flex: 1; line-height: 1.4; }
+.qa-chevron { color: var(--t4); flex-shrink: 0; transition: transform .25s; margin-top: 1px; }
+.qa-a {
+  padding: 0 20px; max-height: 0; overflow: hidden;
+  background: var(--surf); border-top: 0 solid var(--b1);
+  transition: max-height .3s ease, padding .3s ease, border-top-width .3s;
+}
+.qa-a p { font-size: 14px; color: var(--t2); line-height: 1.6; }
+.qa-item.open .qa-a { max-height: 400px; padding: 16px 20px; border-top-width: 1px; }
+.qa-item.open .qa-chevron { transform: rotate(180deg); }
+
+/* ═══ LAYER DIAGRAM ═══ */
+.layer-diagram { display: flex; flex-direction: column; gap: 6px; }
+.layer {
+  padding: 18px 24px;
+  border-radius: var(--r2);
+  display: flex; align-items: center; gap: 16px;
+  position: relative; overflow: hidden;
+}
+.layer::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 4px;
+}
+.layer-a { background: var(--ad); border: 1px solid var(--ab); }
+.layer-a::before { background: var(--amber); }
+.layer-b { background: var(--bd); border: 1px solid var(--bb); }
+.layer-b::before { background: var(--blue); }
+.layer-g { background: var(--gd); border: 1px solid var(--gb); }
+.layer-g::before { background: var(--green); }
+.layer-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.layer-icon-a { background: rgba(255,176,32,.2); color: var(--amber); }
+.layer-icon-b { background: rgba(91,156,248,.2); color: var(--blue); }
+.layer-icon-g { background: rgba(18,212,160,.2); color: var(--green); }
+.layer-text { flex: 1; }
+.layer-fw { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 2px; }
+.layer-fw-a { color: var(--amber); }
+.layer-fw-b { color: var(--blue); }
+.layer-fw-g { color: var(--green); }
+.layer-desc { font-size: 14px; color: var(--t2); }
+.layer-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.layer-badge-a { background: rgba(255,176,32,.15); color: var(--amber); }
+.layer-badge-b { background: rgba(91,156,248,.15); color: var(--blue); }
+.layer-badge-g { background: rgba(18,212,160,.15); color: var(--green); }
+
+/* ═══ CRITERIA BANNER ═══ */
+.criteria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.criteria-item {
+  padding: 16px 20px;
+  border: 1px solid var(--b1); border-radius: var(--r2);
+  background: var(--card); display: flex; gap: 14px;
+  transition: border-color .2s;
+}
+.criteria-item:hover { border-color: var(--b2); }
+.criteria-icon { color: var(--blue); flex-shrink: 0; margin-top: 2px; }
+.criteria-title { font-size: 14px; font-weight: 700; color: var(--t1); margin-bottom: 3px; }
+.criteria-desc { font-size: 13px; color: var(--t3); line-height: 1.45; }
+
+/* ═══ SLIDE GRID ═══ */
+.slide-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.slide-item {
+  background: var(--card2); border: 1px solid var(--b1);
+  border-radius: var(--r2); padding: 14px 16px;
+  transition: border-color .2s;
+}
+.slide-item:hover { border-color: var(--b2); }
+.slide-n { font-size: 11px; font-weight: 800; color: var(--t4); letter-spacing: .08em; margin-bottom: 6px; }
+.slide-t { font-size: 13px; font-weight: 700; color: var(--t1); margin-bottom: 5px; line-height: 1.3; }
+.slide-m { font-size: 11px; color: var(--t3); }
+
+/* ═══ RULE ROW ═══ */
+.rule-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid var(--b1);
+}
+.rule-row:last-child { border-bottom: none; }
+.rule-icon { color: var(--amber); flex-shrink: 0; margin-top: 1px; }
+.rule-text { font-size: 15px; color: var(--t2); line-height: 1.5; }
+.rule-text strong { color: var(--t1); }
+
+/* ═══ REFERENCE LIST ═══ */
+.ref-item {
+  padding: 16px 20px; border-bottom: 1px solid var(--b1);
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.ref-item:last-child { border-bottom: none; }
+.ref-num { font-size: 12px; font-weight: 800; color: var(--t4); min-width: 24px; padding-top: 2px; }
+.ref-text { font-size: 14px; color: var(--t3); line-height: 1.55; font-style: italic; }
+.ref-text strong { color: var(--t2); font-style: normal; font-weight: 700; }
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.fade-up { opacity: 0; animation: fadeUp .5s ease forwards; }
+.fade-in { opacity: 0; animation: fadeIn .4s ease forwards; }
+
+[data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+[data-reveal].visible { opacity: 1; transform: translateY(0); }
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; background: transparent; z-index: 200;
+}
+.progress-fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--amber), var(--blue), var(--green));
+  transition: width .1s linear;
+}
+
+/* ═══ BACK TO TOP ═══ */
+.back-top {
+  position: fixed; bottom: 32px; right: 28px; z-index: 100;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--card2); border: 1px solid var(--b2);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--t3); cursor: pointer; text-decoration: none;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s, background .2s;
+}
+.back-top.show { opacity: 1; pointer-events: auto; }
+.back-top:hover { background: var(--card); color: var(--t1); }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .hero { padding: 48px 0 40px; }
+  .hero-stats { gap: 20px; }
+  .criteria-grid { grid-template-columns: 1fr; }
+  .slide-grid { grid-template-columns: repeat(2, 1fr); }
+  .tl-item { grid-template-columns: 72px 1fr; }
+  .slot-row { grid-template-columns: 44px 1fr auto; }
+  .member-header { flex-wrap: wrap; }
+}
+@media (max-width: 540px) {
+  .page-wrap { padding: 0 16px 80px; }
+  .topnav { padding: 0 16px; }
+  .slide-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; gap: 14px; }
+  .stat-val { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<!-- Nav -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="topnav-brand" href="#">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Projeto A3
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#visao">Visão</a>
+      <a class="nav-link" href="#membros">Membros</a>
+      <a class="nav-link" href="#documento">Documento</a>
+      <a class="nav-link" href="#apresentacao">Apresentação</a>
+      <a class="nav-link" href="#cronograma">Cronograma</a>
+      <a class="nav-link" href="#perguntas">Q&A</a>
+      <a class="nav-link" href="#criterios">Critérios</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ══ HERO ══ -->
+  <div class="hero grid-bg" id="top">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-meta fade-up" style="animation-delay:.05s">
+      <span class="tag tag-m">
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        UNISUL · 5º Período
+      </span>
+      <span class="tag tag-m">Governança e Serviços de TI</span>
+      <span class="tag tag-b">
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        08 a 20/06/2026
+      </span>
+    </div>
+
+    <h1 class="fade-up" style="animation-delay:.1s">
+      Projeto <span class="hi-b">A3</span><br>Governança de TI
+    </h1>
+
+    <p class="hero-sub fade-up" style="animation-delay:.18s">
+      Análise comparativa de COBIT 2019, ITIL 4 e ISO 38500 — como usar os três frameworks de forma complementar para construir um sistema de governança robusto.
+    </p>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;" class="fade-up" style="animation-delay:.24s">
+      <span class="tag tag-a">
+        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        ISO 38500
+      </span>
+      <span class="tag tag-b">COBIT 2019</span>
+      <span class="tag tag-g">ITIL 4</span>
+    </div>
+
+    <div class="hero-stats fade-up" style="animation-delay:.3s">
+      <div class="stat-item">
+        <span class="stat-val" style="color:var(--blue)">40</span>
+        <span class="stat-lbl">Pontos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">10</span>
+        <span class="stat-lbl">Min apresentação</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val">6</span>
+        <span class="stat-lbl">Integrantes</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" style="color:var(--amber)">15+</span>
+        <span class="stat-lbl">Páginas mínimas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ VISÃO GERAL ══ -->
+  <div class="section-block" id="visao">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">01</span>
+        <h2>O que o projeto<br><span class="hi-b">precisa demonstrar</span></h2>
+      </div>
+      <span class="section-num">Visão Geral</span>
+    </div>
+
+    <p class="body-lg" style="max-width:700px;margin-bottom:32px;" data-reveal>
+      O professor avalia se o grupo realmente compreende os frameworks — não só se os descreve. O diferencial está em mostrar a <strong style="color:var(--t1)">complementaridade</strong>, não a comparação isolada.
+    </p>
+
+    <div class="item-list" data-reveal>
+      <div class="item">
+        <div class="item-num item-num-b">01</div>
+        <div>
+          <div class="item-title">Foco e público-alvo distintos</div>
+          <div class="item-desc">Cada framework serve a um nível organizacional diferente — board, gestão ou operação. Mostrar essa distinção é fundamental.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-num item-num-b">02</div>
+        <div>
+          <div class="item-title">Não se substituem — se complementam</div>
+          <div class="item-desc">COBIT, ITIL e ISO 38500 cobrem camadas diferentes. Usar só um gera lacunas. A análise precisa deixar isso claro.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-num item-num-b">03</div>
+        <div>
+          <div class="item-title">Sistema de governança coerente</div>
+          <div class="item-desc">O grupo precisa mostrar como montar um sistema integrado usando os três, não apenas listar features de cada um.</div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-num item-num-b">04</div>
+        <div>
+          <div class="item-title">Domínio dos conceitos de sala</div>
+          <div class="item-desc">5 pilares, cascata de objetivos, EDM, APO/BAI/DSS/MEA, SVS do ITIL, 6 princípios da ISO 38500. Estes são o vocabulário mínimo.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-xl" data-reveal>
+      <div class="layer-diagram">
+        <div class="layer layer-a">
+          <div class="layer-icon layer-icon-a">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="layer-text">
+            <div class="layer-fw layer-fw-a">ISO 38500</div>
+            <div class="layer-desc">Define o "para onde" e o "por quê" — nível do Conselho e Diretoria</div>
+          </div>
+          <div class="layer-badge layer-badge-a">Estratégico</div>
+        </div>
+        <div class="layer layer-b">
+          <div class="layer-icon layer-icon-b">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <div class="layer-text">
+            <div class="layer-fw layer-fw-b">COBIT 2019</div>
+            <div class="layer-desc">Define o "o quê" e os controles — nível de gestão de TI</div>
+          </div>
+          <div class="layer-badge layer-badge-b">Tático</div>
+        </div>
+        <div class="layer layer-g">
+          <div class="layer-icon layer-icon-g">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="layer-text">
+            <div class="layer-fw layer-fw-g">ITIL 4</div>
+            <div class="layer-desc">Define o "como entregar" — nível operacional, execução diária</div>
+          </div>
+          <div class="layer-badge layer-badge-g">Operacional</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-lg grid-3" data-reveal>
+      <div class="card acc acc-a" style="padding-top:22px">
+        <span class="ey ey-a">Documento</span>
+        <h4>PDF ou DOCX</h4>
+        <p class="body-sm mt-sm">Cada membro escreve sua seção. M1 revisa e integra o documento completo.</p>
+        <p class="hint mt-md">Prazo: 1 semana antes da apresentação</p>
+      </div>
+      <div class="card acc acc-b" style="padding-top:22px">
+        <span class="ey ey-b">Slides</span>
+        <h4>11 slides</h4>
+        <p class="body-sm mt-sm">M1 organiza a estrutura, cada membro contribui com o conteúdo da sua seção.</p>
+        <p class="hint mt-md">Prazo: 3 dias antes</p>
+      </div>
+      <div class="card acc acc-g" style="padding-top:22px">
+        <span class="ey ey-g">Ensaio</span>
+        <h4>Cronometrado</h4>
+        <p class="body-sm mt-sm">Dois ensaios obrigatórios. O segundo simula perguntas do professor.</p>
+        <p class="hint mt-md">Prazo: 2 dias antes</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MEMBROS ══ -->
+  <div class="section-block" id="membros">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">02</span>
+        <h2>Divisão de<br><span class="hi-b">Responsabilidades</span></h2>
+      </div>
+      <span class="section-num">6 Frentes</span>
+    </div>
+
+    <div class="note mb-xl" data-reveal>
+      <span class="note-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Lógica da divisão
+      </span>
+      <p class="note-text">As <strong class="nb">6 frentes</strong> têm complexidade equivalente, calibrada por volume de pesquisa + dificuldade conceitual + tamanho da entrega. Membros com seções menores acumulam tarefas de integração ou coordenação.</p>
+    </div>
+
+    <div class="grid-2" style="gap:20px">
+
+      <!-- M1 -->
+      <div class="member-card" data-reveal>
+        <div class="stripe-b"></div>
+        <div class="member-header">
+          <div class="member-id m1">M1</div>
+          <div style="flex:1">
+            <div class="member-role">Coordenador do grupo</div>
+            <div class="member-name">Introdução & Conclusão</div>
+            <div class="member-subtitle">Revisão geral do documento + organização dos slides</div>
+          </div>
+        </div>
+        <div class="member-body">
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Seções no documento
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="item-accent item-accent-b" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--blue)">Seção 1</div>
+                <div class="ia-val">Introdução e contextualização</div>
+              </div>
+              <div class="item-accent item-accent-b" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--blue)">Seção 2</div>
+                <div class="ia-val">Referencial Teórico Comum (1 pág.)</div>
+              </div>
+              <div class="item-accent item-accent-b" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--blue)">Seção 9</div>
+                <div class="ia-val">Conclusão + revisão final do documento</div>
+              </div>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Conceitos a dominar
+            </div>
+            <div style="display:flex;flex-wrap:wrap">
+              <span class="concept-pill">Por que a governança surgiu</span>
+              <span class="concept-pill">Gap estratégico / Enron / SOX</span>
+              <span class="concept-pill">Governança × Gestão</span>
+              <span class="concept-pill">5 Pilares da Gov. de TI</span>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Fontes principais
+            </div>
+            <p class="body-sm" style="color:var(--t3)">Aulas 1 e 2 · Fernandes & Abreu cap. 1 · Arquivos <code style="font-size:12px;background:var(--card2);padding:1px 5px;border-radius:3px">02_A_Origem...</code> e <code style="font-size:12px;background:var(--card2);padding:1px 5px;border-radius:3px">03_Estruturas...</code></p>
+          </div>
+        </div>
+        <div class="member-footer">
+          <div class="time-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Apresentação: ~1,5 min
+          </div>
+          <span class="tag tag-b">Abertura + Fechamento</span>
+        </div>
+      </div>
+
+      <!-- M2 -->
+      <div class="member-card" data-reveal>
+        <div class="stripe-b"></div>
+        <div class="member-header">
+          <div class="member-id m2">M2</div>
+          <div style="flex:1">
+            <div class="member-role">Framework principal — maior volume</div>
+            <div class="member-name">COBIT 2019</div>
+            <div class="member-subtitle">Conteúdo mais detalhado — já ministrado em sala</div>
+          </div>
+        </div>
+        <div class="member-body">
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Seção no documento
+            </div>
+            <div class="item-accent item-accent-b" style="padding:10px 14px">
+              <div class="ia-label" style="color:var(--blue)">Seção 3</div>
+              <div class="ia-val">COBIT 2019 — visão completa (3.1 a 3.6)</div>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Conceitos a dominar
+            </div>
+            <div style="display:flex;flex-wrap:wrap">
+              <span class="concept-pill">Evolução COBIT 1→2019</span>
+              <span class="concept-pill">6 Princípios do sistema</span>
+              <span class="concept-pill">Cascata de Objetivos</span>
+              <span class="concept-pill">5 Domínios (EDM/APO/BAI/DSS/MEA)</span>
+              <span class="concept-pill">40 Objetivos</span>
+              <span class="concept-pill">PDCA × COBIT</span>
+              <span class="concept-pill">Fatores de Desenho</span>
+              <span class="concept-pill">COBIT como integrador</span>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Fontes principais
+            </div>
+            <p class="body-sm" style="color:var(--t3)">Aulas 6 e 7 · Fernandes & Abreu cap. COBIT · Arquivos <code style="font-size:12px;background:var(--card2);padding:1px 5px;border-radius:3px">06_COBIT_Visão_Geral</code> e <code style="font-size:12px;background:var(--card2);padding:1px 5px;border-radius:3px">07_COBIT_Os_40_Objetivos</code></p>
+          </div>
+        </div>
+        <div class="member-footer">
+          <div class="time-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Apresentação: ~2 min
+          </div>
+          <span class="tag tag-b">Explica + Cascata de Objetivos</span>
+        </div>
+      </div>
+
+      <!-- M3 -->
+      <div class="member-card" data-reveal>
+        <div class="stripe-g"></div>
+        <div class="member-header">
+          <div class="member-id m3">M3</div>
+          <div style="flex:1">
+            <div class="member-role">Pesquisa além das aulas</div>
+            <div class="member-name">ITIL 4</div>
+            <div class="member-subtitle">Conteúdo ainda não ministrado — exige pesquisa autônoma</div>
+          </div>
+        </div>
+        <div class="member-body">
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Seção no documento
+            </div>
+            <div class="item-accent item-accent-g" style="padding:10px 14px">
+              <div class="ia-label" style="color:var(--green)">Seção 4</div>
+              <div class="ia-val">ITIL 4 — visão completa (4.1 a 4.6)</div>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Conceitos a dominar
+            </div>
+            <div style="display:flex;flex-wrap:wrap">
+              <span class="concept-pill">4 Dimensões da Gestão</span>
+              <span class="concept-pill">7 Princípios Orientadores</span>
+              <span class="concept-pill">SVS — Sistema de Valor</span>
+              <span class="concept-pill">SVC — Cadeia de Valor</span>
+              <span class="concept-pill">3 categorias de práticas</span>
+              <span class="concept-pill">Gestão de Incidentes</span>
+              <span class="concept-pill">Gestão de Problemas</span>
+              <span class="concept-pill">Service Desk</span>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Fontes principais
+            </div>
+            <p class="body-sm" style="color:var(--t3)">Plano de Aula Módulo 2 · Freitas, M.A. (Fundamentos do gerenciamento de serviços de TI) · Fernandes & Abreu cap. ITIL</p>
+          </div>
+          <div class="note" style="background:rgba(255,85,85,.06);border-color:rgba(255,85,85,.25)">
+            <span class="note-label" style="color:var(--red)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;margin-right:4px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              atenção
+            </span>
+            <p class="note-text">M3 precisa conectar o ITIL ao DSS02 do COBIT na apresentação. Isso é o que diferencia quem entende da integração.</p>
+          </div>
+        </div>
+        <div class="member-footer">
+          <div class="time-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Apresentação: ~1,5 min
+          </div>
+          <span class="tag tag-g">Explica + Conexão DSS02</span>
+        </div>
+      </div>
+
+      <!-- M4 -->
+      <div class="member-card" data-reveal>
+        <div class="stripe-a"></div>
+        <div class="member-header">
+          <div class="member-id m4">M4</div>
+          <div style="flex:1">
+            <div class="member-role">Co-coordenação da comparativa</div>
+            <div class="member-name">ISO/IEC 38500</div>
+            <div class="member-subtitle">Seção mais curta + apoio à tabela comparativa de M5</div>
+          </div>
+        </div>
+        <div class="member-body">
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Seções no documento
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="item-accent item-accent-a" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--amber)">Seção 5</div>
+                <div class="ia-val">ISO 38500 — visão completa (5.1 a 5.4)</div>
+              </div>
+              <div class="item-accent item-accent-a" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--amber)">Apoio</div>
+                <div class="ia-val">Fornece dados da ISO 38500 para tabela de M5</div>
+              </div>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Conceitos a dominar
+            </div>
+            <div style="display:flex;flex-wrap:wrap">
+              <span class="concept-pill">Público-alvo: Board</span>
+              <span class="concept-pill">6 Princípios</span>
+              <span class="concept-pill">Ciclo Avaliar→Dirigir→Monitorar</span>
+              <span class="concept-pill">Relação com EDM do COBIT</span>
+              <span class="concept-pill">ISO = "por quê" / COBIT = "como"</span>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Fontes principais
+            </div>
+            <p class="body-sm" style="color:var(--t3)">Plano de Aula Módulo 2 · Fernandes & Abreu cap. ISO 38500 · Molinaro & Ramos</p>
+          </div>
+        </div>
+        <div class="member-footer">
+          <div class="time-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Apresentação: ~1 min
+          </div>
+          <span class="tag tag-a">Explica + Nível de abstração</span>
+        </div>
+      </div>
+
+      <!-- M5 -->
+      <div class="member-card" data-reveal>
+        <div class="stripe-tri"></div>
+        <div class="member-header">
+          <div class="member-id m5">M5</div>
+          <div style="flex:1">
+            <div class="member-role">Trabalho de síntese</div>
+            <div class="member-name">Análise Comparativa</div>
+            <div class="member-subtitle">Exige domínio de todos os outros frameworks para construir a matriz</div>
+          </div>
+        </div>
+        <div class="member-body">
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Seção no documento
+            </div>
+            <div class="item-accent item-accent-b" style="padding:10px 14px;border-left-color:var(--t3)">
+              <div class="ia-label" style="color:var(--t3)">Seção 6</div>
+              <div class="ia-val">Matriz comparativa + sobreposições e lacunas</div>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+              Tabela comparativa — mínimo 7 critérios
+            </div>
+            <div class="card2" style="padding:0;overflow:auto">
+              <table class="tbl">
+                <thead>
+                  <tr>
+                    <th class="col-m">Critério</th>
+                    <th class="col-a">ISO 38500</th>
+                    <th class="col-b">COBIT 2019</th>
+                    <th class="col-g">ITIL 4</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="row-label">Foco</td>
+                    <td class="va">Governança corporativa</td>
+                    <td class="vb">Gov. e gestão de TI</td>
+                    <td class="vg">Serviços e valor</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Público</td>
+                    <td>Board, CEO</td>
+                    <td>CIO, auditores</td>
+                    <td>Equipes de TI</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Detalhe</td>
+                    <td>Alto nível (princípios)</td>
+                    <td>Alto (40 objetivos)</td>
+                    <td>Médio-alto (práticas)</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Abordagem</td>
+                    <td>Princípios + diretrizes</td>
+                    <td>Processos + controles</td>
+                    <td>Serviços + valor</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Componentes</td>
+                    <td>6 princípios + ciclo EDM</td>
+                    <td>5 domínios (EDM→MEA)</td>
+                    <td>SVS + SVC + práticas</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Certificação</td>
+                    <td>Nenhuma formal</td>
+                    <td>ISACA (Foundation)</td>
+                    <td>PeopleCert (Foundation)</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Lacuna isolado</td>
+                    <td class="vr">Sem processos práticos</td>
+                    <td class="vr">Sem execução de campo</td>
+                    <td class="vr">Sem elo com o board</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="member-footer">
+          <div class="time-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Apresentação: ~2 min
+          </div>
+          <span class="tag tag-m">Tabela + Complementaridade</span>
+        </div>
+      </div>
+
+      <!-- M6 -->
+      <div class="member-card" data-reveal>
+        <div class="stripe-g"></div>
+        <div class="member-header">
+          <div class="member-id m6">M6</div>
+          <div style="flex:1">
+            <div class="member-role">Trabalho mais criativo</div>
+            <div class="member-name">Integração & Cenário Prático</div>
+            <div class="member-subtitle">Síntese e aplicação — exige entender todos os outros</div>
+          </div>
+        </div>
+        <div class="member-body">
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Seções no documento
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="item-accent item-accent-g" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--green)">Seção 7</div>
+                <div class="ia-val">Como usar os três frameworks de forma complementar</div>
+              </div>
+              <div class="item-accent item-accent-g" style="padding:10px 14px">
+                <div class="ia-label" style="color:var(--green)">Seção 8</div>
+                <div class="ia-val">Cenário prático (software house Florianópolis)</div>
+              </div>
+            </div>
+          </div>
+          <div class="member-section">
+            <div class="member-section-title">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Conceitos a dominar
+            </div>
+            <div style="display:flex;flex-wrap:wrap">
+              <span class="concept-pill">Modelo de camadas</span>
+              <span class="concept-pill">ISO→COBIT→ITIL</span>
+              <span class="concept-pill">Fluxo ISO EDM → COBIT EDM01-05 → DSS02 → ITIL Incidentes</span>
+              <span class="concept-pill">Cenário B2B real</span>
+            </div>
+          </div>
+          <div class="card2 card-accent-g mt-sm">
+            <div class="note-label" style="color:var(--green)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Cenário sugerido
+            </div>
+            <p class="note-text">Software house de Florianópolis recebe contrato B2B que exige conformidade de governança. Como os três frameworks seriam aplicados? ISO 38500 aprova investimento → COBIT APO12/APO13 define controles → ITIL implementa Service Desk.</p>
+          </div>
+        </div>
+        <div class="member-footer">
+          <div class="time-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Apresentação: ~1,5 min
+          </div>
+          <span class="tag tag-g">Visual + Cenário prático</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ DOCUMENTO TÉCNICO ══ -->
+  <div class="section-block" id="documento">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">03</span>
+        <h2>Estrutura do<br><span class="hi-b">Documento Técnico</span></h2>
+      </div>
+      <span class="section-num">15–25 páginas</span>
+    </div>
+
+    <div class="grid-2" style="gap:24px;margin-bottom:32px" data-reveal>
+      <div>
+        <p class="body-lg" style="margin-bottom:16px">O documento técnico é a <strong style="color:var(--t1)">prova documental</strong> entregue ao professor. Deve ser formal, bem referenciado e demonstrar domínio real do conteúdo.</p>
+        <div class="note">
+          <span class="note-label">Formatação mínima</span>
+          <p class="note-text">Arial ou Calibri 12pt · Espaçamento 1,5 · Margens 2,5cm · Normas ABNT para referências</p>
+        </div>
+      </div>
+      <div class="card acc acc-b" style="padding-top:22px">
+        <span class="ey ey-b">Regra de ouro</span>
+        <h4>Não é resumo de Wikipedia</h4>
+        <p class="body-sm mt-sm">Cada seção precisa de profundidade suficiente para provar domínio. Todas as afirmações precisam de referência bibliográfica em ABNT.</p>
+      </div>
+    </div>
+
+    <div class="panel" data-reveal>
+      <span class="sec-label">Estrutura obrigatória</span>
+      <div class="item-list">
+        <div class="item"><div class="item-num item-num-b">CAPA</div><div><div class="item-title">Identificação</div><div class="item-desc">Nome da disciplina, semestre, professor, título do projeto e nomes dos 6 integrantes</div></div></div>
+        <div class="item"><div class="item-num item-num-b">SUM</div><div><div class="item-title">Sumário</div><div class="item-desc">Índice com numeração das seções</div></div></div>
+        <div class="item"><div class="item-num item-num-b">S1</div><div><div class="item-title">Introdução e contextualização <span style="color:var(--blue);font-size:12px;font-weight:700">[M1]</span></div><div class="item-desc">1.1 Contexto · 1.2 O problema · 1.3 Objetivos · 1.4 Metodologia</div></div></div>
+        <div class="item"><div class="item-num item-num-b">S2</div><div><div class="item-title">Referencial Teórico Comum <span style="color:var(--blue);font-size:12px;font-weight:700">[M1 — ~1 pág.]</span></div><div class="item-desc">2.1 Distinção entre Governança e Gestão de TI · 2.2 Os 5 Pilares</div></div></div>
+        <div class="item"><div class="item-num item-num-b">S3</div><div><div class="item-title">COBIT 2019 <span style="color:var(--blue);font-size:12px;font-weight:700">[M2]</span></div><div class="item-desc">3.1 Histórico · 3.2 6 Princípios · 3.3 Cascata de Objetivos · 3.4 5 Domínios e 40 Objetivos · 3.5 Fatores de Desenho · 3.6 COBIT como integrador</div></div></div>
+        <div class="item"><div class="item-num item-num-g">S4</div><div><div class="item-title">ITIL 4 <span style="color:var(--green);font-size:12px;font-weight:700">[M3]</span></div><div class="item-desc">4.1 Histórico · 4.2 4 Dimensões · 4.3 7 Princípios · 4.4 SVS · 4.5 SVC · 4.6 Práticas essenciais</div></div></div>
+        <div class="item"><div class="item-num item-num-a">S5</div><div><div class="item-title">ISO/IEC 38500 <span style="color:var(--amber);font-size:12px;font-weight:700">[M4]</span></div><div class="item-desc">5.1 Propósito e público-alvo · 5.2 6 Princípios · 5.3 Ciclo Avaliar→Dirigir→Monitorar · 5.4 Relação com governança corporativa</div></div></div>
+        <div class="item"><div class="item-num" style="background:rgba(255,255,255,.06);color:var(--t3);border:1px solid var(--b1)">S6</div><div><div class="item-title">Análise Comparativa <span style="color:var(--t3);font-size:12px;font-weight:700">[M5]</span></div><div class="item-desc">6.1 Critérios · 6.2 Matriz comparativa (mín. 7 critérios) · 6.3 Sobreposições e lacunas · 6.4 O que acontece sem complementaridade</div></div></div>
+        <div class="item"><div class="item-num item-num-g">S7</div><div><div class="item-title">Integração Complementar + Cenário <span style="color:var(--green);font-size:12px;font-weight:700">[M6]</span></div><div class="item-desc">7.1 Modelo de camadas · 7.2 Fluxo de conexão · 7.3 Cenário prático de aplicação</div></div></div>
+        <div class="item"><div class="item-num item-num-b">S8</div><div><div class="item-title">Conclusão <span style="color:var(--blue);font-size:12px;font-weight:700">[M1]</span></div><div class="item-desc">8.1 Síntese das descobertas · 8.2 Lição principal do projeto</div></div></div>
+        <div class="item"><div class="item-num item-num-b">REF</div><div><div class="item-title">Referências Bibliográficas</div><div class="item-desc">ABNT — todas as fontes utilizadas por todos os membros</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ APRESENTAÇÃO ══ -->
+  <div class="section-block" id="apresentacao">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">04</span>
+        <h2>Roteiro da<br><span class="hi-b">Apresentação</span></h2>
+      </div>
+      <span class="section-num">10 minutos</span>
+    </div>
+
+    <div class="grid-2" style="gap:24px;margin-bottom:32px" data-reveal>
+      <div class="card acc acc-tri" style="padding-top:22px">
+        <span class="ey ey-m">Total cronometrado</span>
+        <div style="font-size:40px;font-weight:800;color:var(--t1);letter-spacing:-.03em;line-height:1">9,5 min</div>
+        <p class="body-sm mt-sm" style="color:var(--t3)">Dentro do limite de 10 min. A margem de 30 segundos cobre transições.</p>
+      </div>
+      <div class="card" style="display:flex;flex-direction:column;gap:8px">
+        <span class="ey ey-b">Sequência de slots</span>
+        <div class="slot-row" style="padding-top:0">
+          <div class="slot-num">1</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--blue)">M1</div>
+            <div class="slot-topic">Abertura — contexto e o problema central</div>
+          </div>
+          <div class="slot-time">1 min</div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-num">2</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--blue)">M2</div>
+            <div class="slot-topic">COBIT 2019 — o que é, como funciona, exemplo da Cascata</div>
+          </div>
+          <div class="slot-time">2 min</div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-num">3</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--green)">M3</div>
+            <div class="slot-topic">ITIL 4 — o que é, como funciona, exemplo prático</div>
+          </div>
+          <div class="slot-time">1,5 min</div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-num">4</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--amber)">M4</div>
+            <div class="slot-topic">ISO 38500 — o que é, para quem é, os 6 princípios</div>
+          </div>
+          <div class="slot-time">1 min</div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-num">5</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--t3)">M5</div>
+            <div class="slot-topic">Análise comparativa — tabela + ponto-chave da complementaridade</div>
+          </div>
+          <div class="slot-time">2 min</div>
+        </div>
+        <div class="slot-row">
+          <div class="slot-num">6</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--green)">M6</div>
+            <div class="slot-topic">Integração — modelo de camadas + cenário prático</div>
+          </div>
+          <div class="slot-time">1,5 min</div>
+        </div>
+        <div class="slot-row" style="border:none">
+          <div class="slot-num">7</div>
+          <div class="slot-content">
+            <div class="slot-who" style="color:var(--blue)">M1</div>
+            <div class="slot-topic">Conclusão — síntese de 1 linha por framework</div>
+          </div>
+          <div class="slot-time">30 seg</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-xl" data-reveal>
+      <span class="ey ey-m">Estrutura dos slides</span>
+      <div class="slide-grid mt-md">
+        <div class="slide-item">
+          <div class="slide-n">Slide 1</div>
+          <div class="slide-t">Capa</div>
+          <div class="slide-m">Título, nomes, disciplina</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--bb)">
+          <div class="slide-n" style="color:var(--blue)">Slide 2</div>
+          <div class="slide-t">O problema</div>
+          <div class="slide-m">M1 — Por que frameworks?</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--bb)">
+          <div class="slide-n" style="color:var(--blue)">Slide 3</div>
+          <div class="slide-t">Visão geral dos 3</div>
+          <div class="slide-m">M1 — 1 linha cada, visual</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--bb)">
+          <div class="slide-n" style="color:var(--blue)">Slide 4</div>
+          <div class="slide-t">COBIT — Princípios</div>
+          <div class="slide-m">M2 — 6 princípios + Cascata</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--bb)">
+          <div class="slide-n" style="color:var(--blue)">Slide 5</div>
+          <div class="slide-t">COBIT — 5 Domínios</div>
+          <div class="slide-m">M2 — diagrama do ciclo</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--gb)">
+          <div class="slide-n" style="color:var(--green)">Slide 6</div>
+          <div class="slide-t">ITIL 4 — SVS</div>
+          <div class="slide-m">M3 — SVS + 7 princípios</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--ab)">
+          <div class="slide-n" style="color:var(--amber)">Slide 7</div>
+          <div class="slide-t">ISO 38500</div>
+          <div class="slide-m">M4 — 6 princípios + ciclo EDM</div>
+        </div>
+        <div class="slide-item">
+          <div class="slide-n">Slide 8</div>
+          <div class="slide-t">Tabela comparativa</div>
+          <div class="slide-m">M5 — slide mais denso</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--gb)">
+          <div class="slide-n" style="color:var(--green)">Slide 9</div>
+          <div class="slide-t">Integração</div>
+          <div class="slide-m">M6 — modelo de camadas</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--gb)">
+          <div class="slide-n" style="color:var(--green)">Slide 10</div>
+          <div class="slide-t">Cenário prático</div>
+          <div class="slide-m">M6 — 3 bullets (1 por framework)</div>
+        </div>
+        <div class="slide-item" style="border-color:var(--bb)">
+          <div class="slide-n" style="color:var(--blue)">Slide 11</div>
+          <div class="slide-t">Conclusão</div>
+          <div class="slide-m">M1 — síntese final</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-xl" data-reveal>
+      <span class="ey ey-a">Regras de ouro para a apresentação</span>
+      <div class="card mt-md">
+        <div class="rule-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rule-icon"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p class="rule-text"><strong>Cada membro fala SÓ do que pesquisou.</strong> O professor pergunta individualmente — não tem como inventar na hora.</p>
+        </div>
+        <div class="rule-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rule-icon"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p class="rule-text"><strong>Não leia o slide.</strong> Use os slides como guia visual. A fala é sua — o professor percebe quando você está lendo.</p>
+        </div>
+        <div class="rule-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rule-icon"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p class="rule-text"><strong>Pratique com cronômetro.</strong> Se um membro estourar, os seguintes perdem tempo. É uma corrente.</p>
+        </div>
+        <div class="rule-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rule-icon"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p class="rule-text"><strong>Transição rápida.</strong> "Agora o [nome] vai falar sobre..." — 5 segundos e passa o bastão.</p>
+        </div>
+        <div class="rule-row" style="border:none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="rule-icon"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <p class="rule-text"><strong>Esteja na defesa.</strong> O professor vai perguntar ao membro mais fraco. Todos precisam saber o básico dos três frameworks.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CRONOGRAMA ══ -->
+  <div class="section-block" id="cronograma">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">05</span>
+        <h2>Cronograma<br><span class="hi-b">Sugerido</span></h2>
+      </div>
+      <span class="section-num">4 Semanas</span>
+    </div>
+
+    <div class="timeline" data-reveal>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 1</span>
+          <span class="tl-dot active"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Pesquisa individual e fichamento</div>
+          <div class="tl-desc">Cada membro lê as fontes da sua seção e faz anotações estruturadas</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-m">Individual</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 2</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Rascunho de cada seção</div>
+          <div class="tl-desc">Cada membro entrega o rascunho para M1 revisar</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-b">Individual → M1</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 2</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Construção da tabela comparativa</div>
+          <div class="tl-desc">M5 monta a tabela com dados fornecidos por M2, M3 e M4</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-m">M5 + M2/M3/M4</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 3</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Integração e formatação do documento</div>
+          <div class="tl-desc">M1 integra todas as seções, revisa coesão, aplica formatação ABNT</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-b">M1</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 3</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Montagem dos slides</div>
+          <div class="tl-desc">M1 estrutura, cada membro fornece o conteúdo da sua parte</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-m">Todos</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 3</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Ensaio 1 — cronometrado</div>
+          <div class="tl-desc">Cada membro fala sua parte com o cronômetro rodando</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-m">Todos</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 4</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Ajustes pós-ensaio</div>
+          <div class="tl-desc">Corrigir timing, melhorar slides problemáticos, reforçar pontos fracos</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-m">Todos</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week">Sem 4</span>
+          <span class="tl-dot"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title">Ensaio 2 — simula Q&A do professor</div>
+          <div class="tl-desc">Alguém do grupo faz as perguntas prováveis para cada membro responder</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-m">Todos</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <span class="tl-week" style="color:var(--amber)">A3</span>
+          <span class="tl-dot" style="background:var(--amber);border-color:var(--amber);box-shadow:0 0 8px rgba(255,176,32,.5)"></span>
+        </div>
+        <div class="tl-right">
+          <div class="tl-title" style="color:var(--amber)">Seminário A3</div>
+          <div class="tl-desc">08 a 20 de junho de 2026</div>
+          <div class="tl-resp">
+            <span class="tl-tag tl-tag-a">Todos presentes</span>
+            <span class="tl-tag tl-tag-a">40 pontos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PERGUNTAS PROVÁVEIS ══ -->
+  <div class="section-block" id="perguntas">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">06</span>
+        <h2>Perguntas Prováveis<br><span class="hi-b">do Professor</span></h2>
+      </div>
+      <span class="section-num">Defesa Q&A</span>
+    </div>
+
+    <p class="body-lg" style="margin-bottom:24px" data-reveal>Preparem resposta sólida para estas. São as mais frequentes neste tipo de seminário.</p>
+
+    <div data-reveal>
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-q-icon"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="qa-q-text">Qual a diferença principal entre o COBIT e o ITIL?</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="qa-a">
+          <p>COBIT governa e controla; ITIL executa e entrega serviços. Um define <em>o quê</em> deve ser feito, o outro define <em>como</em> fazer no dia a dia. São camadas diferentes — o COBIT define o objetivo de controle (ex: DSS02), o ITIL fornece o processo detalhado de como executá-lo (Gestão de Incidentes).</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-q-icon"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="qa-q-text">Por que a ISO 38500 não tem processos detalhados?</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="qa-a">
+          <p>Porque ela é dirigida ao board — conselho e diretoria — e não à operação. O board precisa de princípios e diretrizes para tomar decisões estratégicas, não de procedimentos técnicos. Detalhes operacionais são responsabilidade de quem executa, não de quem dirige.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-q-icon"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="qa-q-text">Uma empresa pequena precisa dos três frameworks?</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="qa-a">
+          <p>Não necessariamente. O COBIT tem Fatores de Desenho justamente para isso — uma PME pode adotar só os objetivos mais relevantes do COBIT + práticas essenciais do ITIL, sem precisar da ISO 38500 formalmente. A adoção é proporcional à maturidade e ao contexto da organização.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-q-icon"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="qa-q-text">Qual o framework mais importante dos três?</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="qa-a">
+          <p>Depende do nível organizacional. Para o board: ISO 38500. Para a gestão de TI: COBIT 2019. Para as equipes de operação: ITIL 4. A pergunta em si revela um equívoco — os três cobrem camadas diferentes e não concorrem entre si.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-q-icon"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="qa-q-text">Como o COBIT se relaciona com a ISO 38500?</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="qa-a">
+          <p>A ISO 38500 define o "porquê" e os princípios que o board deve seguir. O domínio EDM do COBIT é a implementação operacional desses mesmos princípios. Ambos usam o ciclo Avaliar-Dirigir-Monitorar — não é coincidência, é alinhamento intencional de níveis diferentes.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-q-icon"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="qa-q-text">Me dê um exemplo do ITIL conectado ao COBIT.</div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="qa-chevron"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="qa-a">
+          <p>O DSS02 do COBIT (Gerenciar Requisições e Incidentes) mapeia diretamente para a prática de Gestão de Incidentes do ITIL. O COBIT define o objetivo de controle — o que a organização deve alcançar. O ITIL fornece o processo detalhado de como executar isso na prática.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CRITÉRIOS ══ -->
+  <div class="section-block" id="criterios">
+    <div class="section-header" data-reveal>
+      <div>
+        <span class="ey ey-m">07</span>
+        <h2>Critérios de<br><span class="hi-b">Qualidade</span></h2>
+      </div>
+      <span class="section-num">O que o professor avalia</span>
+    </div>
+
+    <div class="grid-2" style="gap:24px" data-reveal>
+      <div>
+        <span class="ey ey-b" style="margin-bottom:16px">Documento técnico</span>
+        <div class="criteria-grid">
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Profundidade real</div>
+              <div class="criteria-desc">Cada seção prova domínio, não é resumo superficial</div>
+            </div>
+          </div>
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Referências ABNT</div>
+              <div class="criteria-desc">Toda afirmação tem citação bibliográfica</div>
+            </div>
+          </div>
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Tabela com 7+ critérios</div>
+              <div class="criteria-desc">Seção comparativa com mínimo obrigatório</div>
+            </div>
+          </div>
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Visual de integração</div>
+              <div class="criteria-desc">Diagrama de camadas com legenda explicada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="ey ey-g" style="margin-bottom:16px">Apresentação</span>
+        <div class="criteria-grid">
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon" style="color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">6 membros falam</div>
+              <div class="criteria-desc">Todos falam com fluência sobre sua parte</div>
+            </div>
+          </div>
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon" style="color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Sem leitura de slide</div>
+              <div class="criteria-desc">Nenhum membro lê o que está projetado</div>
+            </div>
+          </div>
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon" style="color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Dentro dos 10 min</div>
+              <div class="criteria-desc">O grupo termina dentro do limite</div>
+            </div>
+          </div>
+          <div class="criteria-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="criteria-icon" style="color:var(--green)"><polyline points="20 6 9 17 4 12"/></svg>
+            <div>
+              <div class="criteria-title">Q&A sem hesitar</div>
+              <div class="criteria-desc">Cada membro responde perguntas da sua seção</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REFERÊNCIAS -->
+    <div class="mt-xl" data-reveal>
+      <span class="ey ey-m">Referências bibliográficas base</span>
+      <div class="card mt-md" style="padding:0">
+        <div class="ref-item">
+          <div class="ref-num">01</div>
+          <div class="ref-text"><strong>FERNANDES, Aragon; ABREU, Vladimir.</strong> Implantando a Governança de TI: da estratégia à gestão de processos e serviços. 4. ed. Rio de Janeiro: Brasport, 2014.</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-num">02</div>
+          <div class="ref-text"><strong>MOLINARO, L.F.R.; RAMOS, K.H.C.</strong> Gestão de tecnologia da informação: governança de TI. Rio de Janeiro: LTC, 2011.</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-num">03</div>
+          <div class="ref-text"><strong>FREITAS, Marcos Andre.</strong> Fundamentos do gerenciamento de serviços de TI. 2. ed. Rio de Janeiro: Brasport, 2013.</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-num">04</div>
+          <div class="ref-text"><strong>ISACA.</strong> COBIT 2019 Framework: Introduction and Methodology. Rolling Meadows: ISACA, 2018.</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-num">05</div>
+          <div class="ref-text"><strong>AXELOS.</strong> ITIL Foundation: ITIL 4 Edition. Norwich: TSO, 2019.</div>
+        </div>
+        <div class="ref-item">
+          <div class="ref-num">06</div>
+          <div class="ref-text"><strong>ISO/IEC 38500:2015.</strong> Information technology — Governance of IT for the organization. Geneva: ISO, 2015.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .page-wrap -->
+
+<!-- Back to top -->
+<a class="back-top" id="backTop" href="#top">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+</a>
+
+<script>
+// Progress bar
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const max = document.body.scrollHeight - window.innerHeight;
+  progress.style.width = (scrolled / max * 100) + '%';
+  document.getElementById('backTop').classList.toggle('show', scrolled > 300);
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('[data-reveal]');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => observer.observe(el));
+
+// Q&A accordion
+function toggleQA(btn) {
+  const item = btn.closest('.qa-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.qa-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('.section-block[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>

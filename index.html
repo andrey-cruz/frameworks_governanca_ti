@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governança de TI — A3 · UNISUL 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="ds">
+:root {
+  --bg:    #07090F;
+  --surf:  #0C1020;
+  --card:  #111828;
+  --card2: #192035;
+  --b1: #2A3655;
+  --b2: #3D5080;
+  --t1: #FFFFFF;
+  --t2: #C8DAEE;
+  --t3: #8099C0;
+  --t4: #4A5F85;
+  --amber: #FFB020;
+  --ad: rgba(255,176,32,.13);
+  --ab: rgba(255,176,32,.38);
+  --blue:  #5B9CF8;
+  --bd: rgba(91,156,248,.13);
+  --bb: rgba(91,156,248,.38);
+  --green: #12D4A0;
+  --gd: rgba(18,212,160,.13);
+  --gb: rgba(18,212,160,.38);
+  --red: #FF5555;
+  --fn: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --r:  12px;
+  --r2:  7px;
+  --r3:  5px;
+  --sh1: 0 1px 3px rgba(0,0,0,.4);
+  --sh2: 0 4px 16px rgba(0,0,0,.5);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--t2);
+  font-family: var(--fn);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Grid BG */
+.grid-bg { position: relative; }
+.grid-bg::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.016) 1px, transparent 1px);
+  background-size: 80px 80px;
+  z-index: 0;
+}
+.grid-bg > * { position: relative; z-index: 1; }
+
+/* Eyebrow */
+.ey {
+  font-size: 12px; font-weight: 800;
+  letter-spacing: .18em; text-transform: uppercase;
+  display: block; margin-bottom: 8px;
+}
+.ey-b { color: var(--blue); }
+.ey-a { color: var(--amber); }
+.ey-g { color: var(--green); }
+.ey-m { color: var(--t3); }
+
+/* Títulos */
+h1 { font-size: clamp(32px, 5vw, 64px); font-weight: 800; color: var(--t1); letter-spacing: -.03em; line-height: .95; }
+h2 { font-size: clamp(20px, 3vw, 36px); font-weight: 800; color: var(--t1); letter-spacing: -.02em; line-height: 1.1; }
+h3 { font-size: 18px; font-weight: 700; color: var(--t1); }
+.hi-b { color: var(--blue); }
+.hi-g { color: var(--green); }
+.hi-a { color: var(--amber); }
+
+/* Tags */
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 4px 12px; border-radius: var(--r3);
+  font-size: 12px; font-weight: 800;
+  letter-spacing: .1em; text-transform: uppercase;
+  white-space: nowrap;
+}
+.tag-a { background: var(--ad); color: var(--amber); border: 1px solid var(--ab); }
+.tag-b { background: var(--bd); color: var(--blue);  border: 1px solid var(--bb); }
+.tag-g { background: var(--gd); color: var(--green); border: 1px solid var(--gb); }
+.tag-m { background: rgba(255,255,255,.06); color: var(--t3); border: 1px solid var(--b1); }
+
+/* Divider */
+.divider { height: 1px; background: var(--b1); }
+
+/* Acento topo */
+.acc { position: relative; }
+.acc::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+.acc-b::before  { background: linear-gradient(90deg, var(--blue) 0%, transparent 60%); }
+.acc-g::before  { background: linear-gradient(90deg, var(--green) 0%, transparent 60%); }
+.acc-a::before  { background: linear-gradient(90deg, var(--amber) 0%, transparent 60%); }
+.acc-tri::before { background: linear-gradient(90deg, var(--amber) 0%, var(--blue) 50%, var(--green) 100%); }
+
+/* ── Layout ── */
+.page { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+/* ── Hero ── */
+.hero {
+  padding: 80px 0 72px;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  margin-bottom: 32px;
+}
+.hero h1 { margin-bottom: 20px; max-width: 800px; }
+.hero-sub {
+  font-size: 18px; color: var(--t2); line-height: 1.6;
+  max-width: 620px; margin-bottom: 36px;
+}
+.hero-footer {
+  padding-top: 32px; border-top: 1px solid var(--b1);
+  display: flex; flex-wrap: wrap; gap: 32px;
+}
+.hf-item { display: flex; flex-direction: column; gap: 4px; }
+.hf-label { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--t4); }
+.hf-val { font-size: 15px; font-weight: 600; color: var(--t2); }
+
+/* ── Seção de entregáveis ── */
+.section { padding: 56px 0; }
+.section-header { margin-bottom: 36px; }
+.section-header h2 { margin-top: 8px; }
+
+/* ── Cards de entregável ── */
+.deliverable-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.d-card {
+  background: var(--card); border: 1px solid var(--b1);
+  border-radius: 14px; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  text-decoration: none;
+}
+.d-card:hover {
+  border-color: var(--b2);
+  transform: translateY(-3px);
+  box-shadow: var(--sh2);
+}
+
+.d-card-stripe { height: 4px; width: 100%; }
+.d-card-stripe-b { background: linear-gradient(90deg, var(--blue), transparent 80%); }
+.d-card-stripe-a { background: linear-gradient(90deg, var(--amber), transparent 80%); }
+.d-card-stripe-g { background: linear-gradient(90deg, var(--green), transparent 80%); }
+
+.d-card-body { padding: 28px 28px 20px; flex: 1; }
+.d-card-icon {
+  width: 48px; height: 48px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 18px;
+}
+.d-card-icon-b { background: var(--bd); border: 1px solid var(--bb); }
+.d-card-icon-a { background: var(--ad); border: 1px solid var(--ab); }
+.d-card-icon-g { background: var(--gd); border: 1px solid var(--gb); }
+
+.d-card-label { font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; color: var(--t4); margin-bottom: 6px; display: block; }
+.d-card h3 { font-size: 19px; margin-bottom: 10px; }
+.d-card p { font-size: 14px; color: var(--t3); line-height: 1.55; }
+
+.d-card-footer {
+  padding: 14px 28px; border-top: 1px solid var(--b1);
+  background: var(--surf);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.d-card-cta {
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px;
+}
+.d-card-cta-b { color: var(--blue); }
+.d-card-cta-a { color: var(--amber); }
+.d-card-cta-g { color: var(--green); }
+.d-card-cta svg { transition: transform .2s; }
+.d-card:hover .d-card-cta svg { transform: translateX(4px); }
+
+/* ── Seção frameworks ── */
+.fw-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  margin-top: 28px;
+}
+.fw-pill {
+  padding: 16px 18px; border-radius: var(--r2);
+  border: 1px solid var(--b1); background: var(--card2);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.fw-pill-name { font-size: 15px; font-weight: 700; color: var(--t1); }
+.fw-pill-desc { font-size: 13px; color: var(--t3); }
+
+/* ── Rodapé ── */
+footer {
+  padding: 32px 0; border-top: 1px solid var(--b1);
+  margin-top: 0;
+}
+.footer-inner {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: 16px;
+}
+.footer-left { font-size: 13px; color: var(--t4); line-height: 1.6; }
+.footer-left strong { color: var(--t3); font-weight: 600; }
+.footer-right { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .deliverable-grid { grid-template-columns: 1fr; }
+  .fw-row { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .page { padding: 0 20px; }
+  .hero { padding: 56px 0 48px; }
+  .fw-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body class="grid-bg">
+
+<div class="page">
+
+  <!-- ══════════════════════ HERO ══════════════════════ -->
+  <section class="hero">
+
+    <div class="hero-meta">
+      <span class="tag tag-m">UNISUL · 5º Semestre SI</span>
+      <span class="tag tag-m">Governança e Serviços de TI</span>
+      <span class="tag tag-a">A3 · 2026-1</span>
+    </div>
+
+    <h1>Análise Comparativa:<br><span class="hi-b">COBIT</span>, <span class="hi-a">ITIL 4</span> &amp; <span class="hi-g">ISO 38500</span></h1>
+
+    <p class="hero-sub">Como utilizar os três frameworks de forma complementar para construir um sistema de governança de TI robusto.</p>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;">
+      <span class="tag tag-b">COBIT 2019</span>
+      <span class="tag tag-a">ITIL 4</span>
+      <span class="tag tag-g">ISO 38500</span>
+    </div>
+
+    <div class="hero-footer">
+      <div class="hf-item">
+        <span class="hf-label">Avaliação</span>
+        <span class="hf-val">A3 — Seminário</span>
+      </div>
+      <div class="hf-item">
+        <span class="hf-label">Período</span>
+        <span class="hf-val">08 a 20/06/2026</span>
+      </div>
+      <div class="hf-item">
+        <span class="hf-label">Formato</span>
+        <span class="hf-val">Documento + Apresentação (10 min)</span>
+      </div>
+      <div class="hf-item">
+        <span class="hf-label">Valor</span>
+        <span class="hf-val">40 pontos</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════ ENTREGÁVEIS ══════════════════════ -->
+  <section class="section">
+
+    <div class="section-header">
+      <span class="ey ey-b">Entregáveis do Projeto</span>
+      <h2>Navegue pelo conteúdo</h2>
+    </div>
+
+    <div class="deliverable-grid">
+
+      <!-- Apresentação -->
+      <a class="d-card acc acc-b" href="apresentacao/index.html">
+        <div class="d-card-stripe d-card-stripe-b"></div>
+        <div class="d-card-body">
+          <div class="d-card-icon d-card-icon-b">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          <span class="d-card-label">Entregável 01</span>
+          <h3>Apresentação</h3>
+          <p>Slides do seminário — 11 lâminas, 10 minutos. Contexto, frameworks, análise comparativa e integração complementar.</p>
+        </div>
+        <div class="d-card-footer">
+          <span class="tag tag-b">Slides</span>
+          <span class="d-card-cta d-card-cta-b">
+            Abrir
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Documento Técnico -->
+      <a class="d-card acc acc-a" href="documento/index.html">
+        <div class="d-card-stripe d-card-stripe-a"></div>
+        <div class="d-card-body">
+          <div class="d-card-icon d-card-icon-a">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <span class="d-card-label">Entregável 02</span>
+          <h3>Documento Técnico</h3>
+          <p>Análise aprofundada dos três frameworks — histórico, princípios, domínios, matriz comparativa e cenário de integração.</p>
+        </div>
+        <div class="d-card-footer">
+          <span class="tag tag-a">PDF / DOCX</span>
+          <span class="d-card-cta d-card-cta-a">
+            Abrir
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+      <!-- Guia do Projeto -->
+      <a class="d-card acc acc-g" href="guia/index.html">
+        <div class="d-card-stripe d-card-stripe-g"></div>
+        <div class="d-card-body">
+          <div class="d-card-icon d-card-icon-g">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <span class="d-card-label">Referência</span>
+          <h3>Guia do Projeto</h3>
+          <p>Divisão de responsabilidades, estrutura do documento, roteiro de apresentação, cronograma e perguntas prováveis do professor.</p>
+        </div>
+        <div class="d-card-footer">
+          <span class="tag tag-g">Guia</span>
+          <span class="d-card-cta d-card-cta-g">
+            Abrir
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════ FRAMEWORKS ══════════════════════ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="ey ey-m">Escopo</span>
+      <h2>Os três frameworks em uma linha</h2>
+    </div>
+
+    <div class="fw-row">
+      <div class="fw-pill" style="border-left: 3px solid var(--blue);">
+        <span class="fw-pill-name" style="color:var(--blue);">COBIT 2019</span>
+        <span class="fw-pill-desc">Governança e gestão de TI — 5 domínios, 40 objetivos, cascata de metas, controles e indicadores.</span>
+      </div>
+      <div class="fw-pill" style="border-left: 3px solid var(--amber);">
+        <span class="fw-pill-name" style="color:var(--amber);">ITIL 4</span>
+        <span class="fw-pill-desc">Gerenciamento de serviços — SVS, cadeia de valor, 7 princípios orientadores e práticas operacionais.</span>
+      </div>
+      <div class="fw-pill" style="border-left: 3px solid var(--green);">
+        <span class="fw-pill-name" style="color:var(--green);">ISO 38500</span>
+        <span class="fw-pill-desc">Governança corporativa de TI — 6 princípios para o board, ciclo Avaliar → Dirigir → Monitorar.</span>
+      </div>
+    </div>
+
+    <!-- Nota de integração -->
+    <div style="
+      margin-top: 20px; padding: 18px 22px;
+      background: var(--card2); border: 1px solid var(--b2);
+      border-radius: var(--r2);
+    ">
+      <span style="font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--t4);display:block;margin-bottom:6px;">Ponto central do projeto</span>
+      <p style="font-size:14px;color:var(--t2);line-height:1.55;">
+        Os três frameworks <strong style="color:var(--t1);">não se substituem — se complementam.</strong>
+        A ISO 38500 define o <em>"porquê"</em> para o board.
+        O COBIT operacionaliza o <em>"o quê"</em> para a gestão de TI.
+        O ITIL detalha o <em>"como"</em> para as equipes de serviço.
+      </p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════ RODAPÉ ══════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-left">
+        <strong>Governança e Serviços de TI — A3 · UNISUL 2026-1</strong><br>
+        Sistemas de Informação · 5º Semestre · Disciplina: Governança e Serviços de TI
+      </div>
+      <div class="footer-right">
+        <span class="tag tag-m">Fernandes &amp; Abreu</span>
+        <span class="tag tag-m">Molinaro &amp; Ramos</span>
+        <span class="tag tag-m">ISACA · AXELOS · ISO</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page -->
+</body>
+</html>

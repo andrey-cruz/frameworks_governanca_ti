@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Governanca de TI — A3 · COBIT 2019, ITIL 4 e ISO 38500</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:    #07090F;
+  --surf:  #0C1020;
+  --card:  #111828;
+  --card2: #192035;
+  --b1:    #2A3655;
+  --b2:    #3D5080;
+
+  /* High-contrast text for projector */
+  --t1: #FFFFFF;
+  --t2: #C8DAEE;
+  --t3: #8099C0;
+  --t4: #4A5F85;
+
+  --amber: #FFB020;
+  --ad:    rgba(255,176,32,.13);
+  --ab:    rgba(255,176,32,.38);
+  --blue:  #5B9CF8;
+  --bd:    rgba(91,156,248,.13);
+  --bb:    rgba(91,156,248,.38);
+  --green: #12D4A0;
+  --gd:    rgba(18,212,160,.13);
+  --gb:    rgba(18,212,160,.38);
+  --red:   #FF5555;
+
+  --fn: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --r:  12px; --r2: 7px;
+}
+
+html, body { width:100%; height:100vh; background:#000; overflow:hidden; font-family:var(--fn); -webkit-font-smoothing:antialiased; }
+
+/* ── PROGRESS — track + fill (gradient only on filled portion) ── */
+#pbt { position:fixed; top:0; left:0; right:0; height:4px; background:rgba(255,255,255,.07); z-index:900; }
+#pbf { height:100%; background:linear-gradient(90deg, var(--amber), var(--blue), var(--green)); width:0%; transition:width .42s cubic-bezier(.4,0,.2,1); }
+
+/* ── DECK ── */
+#deck { position:fixed; top:0; left:0; width:1920px; height:1080px; transform-origin:top left; }
+
+.slide {
+  position:absolute; inset:0; width:1920px; height:1080px;
+  background:var(--bg); overflow:hidden;
+  opacity:0; pointer-events:none;
+  transition:opacity .33s ease, transform .33s ease;
+  transform:translateX(52px);
+  display:flex;
+}
+.slide.active  { opacity:1; pointer-events:all; transform:translateX(0); }
+.slide.exit    { opacity:0; transform:translateX(-40px); pointer-events:none; }
+
+/* ── NAV ── */
+#nav {
+  position:fixed; bottom:26px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:16px;
+  z-index:800; background:rgba(7,9,15,.93);
+  padding:10px 22px; border-radius:50px;
+  border:1px solid var(--b2); backdrop-filter:blur(18px);
+}
+.nbtn {
+  width:44px; height:44px; background:transparent;
+  border:1px solid var(--b2); border-radius:50%;
+  color:var(--t2); font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s, color .15s;
+  font-family:var(--fn); touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.nbtn:hover  { background:var(--card2); color:var(--t1); }
+.nbtn:active { background:var(--b1); }
+.nbtn:disabled { opacity:.22; cursor:default; pointer-events:none; }
+
+#dots { display:flex; gap:7px; align-items:center; }
+.dot {
+  width:6px; height:6px; border-radius:4px;
+  background:var(--b2); cursor:pointer;
+  transition:width .24s ease, background .24s ease;
+  touch-action:manipulation;
+}
+.dot.on { width:22px; background:var(--blue); }
+#ctr { font-size:13px; color:var(--t3); font-weight:600; letter-spacing:.06em; min-width:38px; text-align:center; }
+
+/* ── ROTATE HINT ── */
+#rh {
+  display:none; position:fixed; inset:0; background:var(--bg);
+  z-index:9999; flex-direction:column; align-items:center; justify-content:center;
+  gap:20px; color:var(--t2); font-size:18px; text-align:center; padding:40px;
+}
+@media (max-width:600px) and (orientation:portrait) { #rh { display:flex; } }
+@media (max-width:900px) {
+  .nbtn { width:50px; height:50px; font-size:20px; }
+  .dot { width:8px; height:8px; }
+  .dot.on { width:28px; }
+  #ctr { font-size:15px; }
+  #nav { padding:12px 26px; gap:20px; }
+}
+
+/* ── SHARED UTILS ── */
+.acc-multi { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--amber) 0%,var(--blue) 50%,var(--green) 100%); }
+.acc-blue  { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--blue) 0%,transparent 60%); }
+.acc-green { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--green) 0%,transparent 60%); }
+.acc-amber { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--amber) 0%,transparent 60%); }
+.gbg::after {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);
+  background-size:80px 80px;
+}
+.ey { font-size:14px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; }
+.ey-b { color:var(--blue); }
+.ey-g { color:var(--green); }
+.ey-a { color:var(--amber); }
+.ey-m { color:var(--t3); }
+.tag { display:inline-flex; align-items:center; padding:5px 14px; border-radius:5px; font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+.tag-a { background:var(--ad); color:var(--amber); border:1px solid var(--ab); }
+.tag-b { background:var(--bd); color:var(--blue);  border:1px solid var(--bb); }
+.tag-g { background:var(--gd); color:var(--green); border:1px solid var(--gb); }
+
+
+/* ════════════ S01 — CAPA ════════════ */
+#s01 { flex-direction:row; }
+#s01 .main { flex:1; display:flex; flex-direction:column; justify-content:center; padding:80px 90px 80px 110px; }
+#s01 .inst { font-size:15px; color:var(--t4); font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:42px; }
+#s01 h1 { font-size:96px; font-weight:800; color:var(--t1); line-height:.9; margin-bottom:22px; letter-spacing:-.03em; }
+#s01 h1 span { color:var(--blue); }
+#s01 .sub { font-size:26px; color:var(--t2); font-weight:400; line-height:1.4; margin-bottom:50px; max-width:760px; }
+#s01 .mbrs { display:grid; grid-template-columns:1fr 1fr; gap:9px; max-width:760px; margin-bottom:40px; }
+#s01 .mbr { display:flex; align-items:center; gap:14px; padding:14px 18px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r2); }
+#s01 .mid { font-size:14px; font-weight:800; color:var(--blue); letter-spacing:.06em; min-width:28px; }
+#s01 .mn  { font-size:16px; color:var(--t2); font-weight:400; }
+#s01 .meta { font-size:15px; color:var(--t3); border-top:1px solid var(--b1); padding-top:22px; max-width:760px; }
+#s01 .sidebar { width:320px; display:flex; background:var(--surf); border-left:1px solid var(--b1); }
+#s01 .stripe { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:80px; border-right:1px solid var(--b1); }
+#s01 .stripe:last-child { border-right:none; }
+#s01 .sfa { background:linear-gradient(to bottom,transparent 20%,rgba(255,176,32,.12)); }
+#s01 .sfb { background:linear-gradient(to bottom,transparent 20%,rgba(91,156,248,.12)); }
+#s01 .sfg { background:linear-gradient(to bottom,transparent 20%,rgba(18,212,160,.12)); }
+#s01 .slbl { writing-mode:vertical-lr; transform:rotate(180deg); font-size:12px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; margin-top:14px; }
+#s01 .sdot { width:9px; height:9px; border-radius:50%; }
+
+
+/* ════════════ S02 — PROBLEMA ════════════ */
+#s02 { flex-direction:row; }
+#s02 .left { flex:1; display:flex; flex-direction:column; justify-content:center; padding:80px 80px 80px 110px; }
+#s02 h2 { font-size:58px; font-weight:800; color:var(--t1); line-height:1.05; letter-spacing:-.02em; margin-top:12px; margin-bottom:42px; max-width:660px; }
+#s02 .pts { display:flex; flex-direction:column; gap:18px; }
+#s02 .pt { display:flex; align-items:flex-start; gap:20px; padding:22px 26px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r); }
+#s02 .pn { font-size:12px; font-weight:800; letter-spacing:.1em; color:var(--blue); background:var(--bd); border:1px solid var(--bb); padding:5px 9px; border-radius:5px; flex-shrink:0; margin-top:1px; }
+#s02 .ptit { font-size:20px; font-weight:700; color:var(--t1); margin-bottom:5px; }
+#s02 .pdsc { font-size:15px; color:var(--t2); line-height:1.55; }
+#s02 .right { width:640px; display:flex; align-items:center; justify-content:center; border-left:1px solid var(--b1); background:var(--surf); padding:56px; }
+.gd { display:flex; flex-direction:column; align-items:center; width:420px; }
+.gdb { width:100%; padding:24px 30px; border-radius:var(--r); text-align:center; }
+.gdt { background:var(--ad); border:1px solid var(--ab); }
+.gdb2 { background:var(--bd); border:1px solid var(--bb); }
+.gdn { font-size:26px; font-weight:800; margin-bottom:5px; }
+.gds { font-size:15px; color:var(--t2); }
+.gdgap { width:100%; height:100px; position:relative; display:flex; align-items:center; justify-content:center;
+  background:repeating-linear-gradient(-45deg,rgba(255,255,255,.022) 0px,rgba(255,255,255,.022) 1px,transparent 1px,transparent 9px);
+  border-left:1px dashed var(--b2); border-right:1px dashed var(--b2); }
+.gdgl { font-size:14px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--t3); background:var(--bg); padding:4px 12px; border-radius:4px; }
+.gdsol { margin-top:18px; padding:16px 24px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); text-align:center; width:100%; }
+.gdsl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:7px; }
+.gdst { font-size:18px; font-weight:700; color:var(--t1); }
+
+
+/* ════════════ S03 — VISAO GERAL ════════════ */
+#s03 { flex-direction:column; }
+#s03 .tp { padding:60px 110px 34px; }
+#s03 h2 { font-size:54px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; }
+#s03 .cs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; padding:0 110px 60px; flex:1; }
+.fwc { display:flex; flex-direction:column; background:var(--card); border:1px solid var(--b1); border-radius:14px; overflow:hidden; }
+.fwcs { height:5px; width:100%; }
+.sa { background:var(--amber); } .sb { background:var(--blue); } .sg { background:var(--green); }
+.fwct { padding:32px 36px 22px; flex:1; }
+.fwcb { padding:20px 36px; border-top:1px solid var(--b1); background:var(--surf); }
+.fwcn { font-size:38px; font-weight:800; letter-spacing:-.01em; margin-bottom:8px; margin-top:14px; }
+.fwcf { font-size:15px; color:var(--t2); margin-bottom:22px; line-height:1.4; }
+.fwcfl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+.fwcfv { font-size:25px; font-weight:700; color:var(--t1); line-height:1.2; margin-bottom:18px; }
+.fwcal { font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:7px; }
+.fwcav { font-size:16px; color:var(--t2); }
+.fwcbr { display:flex; align-items:center; justify-content:space-between; }
+.fwcst { font-size:15px; }
+
+
+/* ════════════ S04 — COBIT PRINCIPIOS + CASCATA ════════════ */
+#s04 { flex-direction:row; }
+#s04 .left { flex:1; display:flex; flex-direction:column; justify-content:center; padding:68px 60px 68px 110px; }
+#s04 h2 { font-size:50px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; margin-bottom:30px; }
+#s04 .prl { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+#s04 .pr { padding:18px 20px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r2); border-left:3px solid var(--blue); }
+#s04 .prn { font-size:13px; font-weight:800; color:var(--blue); letter-spacing:.1em; margin-bottom:7px; }
+#s04 .prv { font-size:17px; font-weight:600; color:var(--t1); line-height:1.3; }
+#s04 .right { width:720px; display:flex; align-items:center; justify-content:center; border-left:1px solid var(--b1); background:var(--surf); padding:56px; }
+.ca { display:flex; flex-direction:column; align-items:center; width:100%; }
+.cab { width:100%; padding:20px 28px; border-radius:var(--r); text-align:center; }
+.cat { font-size:19px; font-weight:700; color:var(--t1); margin-bottom:5px; }
+.cas { font-size:15px; color:var(--t2); }
+.c1{background:rgba(91,156,248,.17);border:1px solid rgba(91,156,248,.42);}
+.c2{background:rgba(91,156,248,.11);border:1px solid rgba(91,156,248,.3);}
+.c3{background:rgba(91,156,248,.07);border:1px solid rgba(91,156,248,.2);}
+.c4{background:rgba(91,156,248,.04);border:1px solid rgba(91,156,248,.15);}
+.caa { display:flex; flex-direction:column; align-items:center; height:30px; justify-content:center; }
+.cal { width:2px; flex:1; background:rgba(91,156,248,.45); }
+.cah { width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:10px solid rgba(91,156,248,.55); }
+.caeg { margin-top:20px; padding:18px 22px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); width:100%; }
+.caeg-l { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:12px; }
+.caeg-r { font-size:15px; color:var(--t2); display:flex; gap:8px; margin-bottom:5px; }
+.caeg-r:last-child { margin-bottom:0; }
+.caeg-r strong { color:var(--blue); font-weight:800; }
+
+
+/* ════════════ S05 — COBIT DOMINIOS ════════════ */
+#s05 { flex-direction:column; justify-content:center; }
+#s05 .tp { padding:60px 110px 34px; }
+#s05 h2 { font-size:50px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; }
+#s05 .dw { padding:0 110px 26px; }
+#s05 .ds { display:grid; grid-template-columns:230px 1fr 1fr 1fr 1fr; gap:16px; height:390px; }
+.dom { border-radius:12px; display:flex; flex-direction:column; padding:28px 26px; }
+.domg { background:linear-gradient(145deg,rgba(91,156,248,.2),rgba(91,156,248,.07)); border:1px solid rgba(91,156,248,.48); }
+.domm { background:var(--card); border:1px solid var(--b1); }
+.dtag { display:inline-block; font-size:13px; font-weight:800; letter-spacing:.1em; margin-bottom:14px; padding:4px 12px; border-radius:5px; }
+.dtg { background:rgba(91,156,248,.22); color:var(--blue); }
+.dtm { background:rgba(255,255,255,.07); color:var(--t3); }
+.dn { font-size:34px; font-weight:800; color:var(--t1); margin-bottom:7px; letter-spacing:-.01em; }
+.df { font-size:14px; color:var(--t2); line-height:1.4; margin-bottom:14px; }
+.dc { margin-top:auto; font-size:60px; font-weight:800; line-height:1; letter-spacing:-.02em; color:var(--b2); }
+.domg .dc { color:rgba(91,156,248,.42); }
+.do { font-size:13px; color:var(--t3); font-weight:500; margin-top:2px; }
+#s05 .pc { padding:0 110px; display:flex; gap:14px; }
+#s05 .pi { flex:1; padding:15px 20px; background:var(--card2); border:1px solid var(--b1); border-radius:var(--r2); display:flex; align-items:center; gap:16px; }
+#s05 .pl { font-size:28px; font-weight:800; color:var(--blue); min-width:26px; }
+#s05 .pp { font-size:15px; font-weight:700; color:var(--t1); letter-spacing:.06em; }
+#s05 .pd { font-size:13px; color:var(--t2); margin-top:3px; }
+
+
+/* ════════════ S06 — ITIL 4 ════════════ */
+#s06 { flex-direction:row; }
+#s06 .left { flex:1; display:flex; flex-direction:column; justify-content:center; padding:68px 60px 68px 110px; }
+#s06 h2 { font-size:50px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; margin-bottom:26px; }
+#s06 .sl { font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--t3); margin-bottom:12px; }
+#s06 .si { display:flex; flex-direction:column; gap:8px; margin-bottom:26px; }
+#s06 .sii { display:flex; align-items:center; gap:14px; padding:13px 18px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r2); }
+#s06 .sin { font-size:13px; font-weight:800; color:var(--green); min-width:22px; }
+#s06 .sit { font-size:17px; font-weight:500; color:var(--t1); }
+#s06 .br { padding:20px 24px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r); border-left:3px solid var(--green); }
+#s06 .brl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:9px; }
+#s06 .brt { font-size:15px; color:var(--t2); line-height:1.55; }
+#s06 .brt strong { color:var(--green); font-weight:700; }
+#s06 .right { width:720px; display:flex; align-items:center; justify-content:center; border-left:1px solid var(--b1); background:var(--surf); padding:56px 52px; }
+#s06 .pw { width:100%; }
+#s06 .p7l { font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--t3); margin-bottom:14px; }
+#s06 .p7 { display:flex; flex-direction:column; gap:8px; }
+#s06 .p7i { display:flex; align-items:center; gap:14px; padding:13px 18px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r2); }
+#s06 .p7n { font-size:13px; font-weight:800; color:var(--green); min-width:24px; }
+#s06 .p7t { font-size:17px; font-weight:500; color:var(--t1); }
+#s06 .prc { margin-top:16px; padding:15px 18px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); }
+#s06 .prl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
+#s06 .prt { display:flex; flex-wrap:wrap; gap:8px; }
+
+
+/* ════════════ S07 — ISO 38500 ════════════ */
+#s07 { flex-direction:row; }
+#s07 .left { flex:1; display:flex; flex-direction:column; justify-content:center; padding:68px 60px 68px 110px; }
+#s07 h2 { font-size:50px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; margin-bottom:8px; }
+#s07 .fn { font-size:17px; color:var(--t2); margin-bottom:28px; line-height:1.4; }
+#s07 .p6 { display:flex; flex-direction:column; gap:10px; }
+#s07 .p6i { display:flex; align-items:flex-start; gap:16px; padding:15px 20px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r2); border-left:3px solid var(--amber); }
+#s07 .p6n { font-size:13px; font-weight:800; color:var(--amber); min-width:24px; margin-top:1px; }
+#s07 .p6nm { font-size:19px; font-weight:700; color:var(--t1); margin-bottom:3px; }
+#s07 .p6ds { font-size:14px; color:var(--t2); line-height:1.4; }
+#s07 .right { width:720px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-left:1px solid var(--b1); background:var(--surf); padding:56px 52px; gap:28px; }
+.ew { width:100%; }
+.el { font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--t3); margin-bottom:20px; text-align:center; }
+.ens { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.enf { grid-column:1/-1; display:flex; justify-content:center; }
+.en { padding:22px 20px; border-radius:var(--r); background:var(--ad); border:1.5px solid var(--ab); text-align:center; }
+.enn { font-size:17px; font-weight:800; color:var(--amber); letter-spacing:.1em; margin-bottom:6px; }
+.end { font-size:14px; color:var(--t2); line-height:1.4; }
+.enc { width:50%; }
+.eco { display:flex; justify-content:space-around; margin:-4px 0; }
+.eco span { width:2px; height:18px; background:rgba(255,176,32,.42); display:block; }
+.inn { width:100%; padding:17px 20px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); }
+.inl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:9px; }
+.int { font-size:15px; color:var(--t2); line-height:1.55; }
+.int strong { color:var(--amber); font-weight:700; }
+
+
+/* ════════════ S08 — COMPARATIVO ════════════ */
+#s08 { flex-direction:column; }
+#s08 .tp { padding:50px 110px 26px; }
+#s08 h2 { font-size:50px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; }
+#s08 .tw { padding:0 110px; flex:1; overflow:hidden; }
+.ct { width:100%; border-collapse:collapse; }
+.ct th { padding:14px 20px; text-align:left; font-size:14px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; border-bottom:2px solid var(--b2); }
+.ct th:first-child { color:var(--t3); width:210px; }
+.tha { color:var(--amber); } .thb { color:var(--blue); } .thg { color:var(--green); }
+.ct td { padding:12px 20px; font-size:15px; color:var(--t2); border-bottom:1px solid var(--b1); vertical-align:top; line-height:1.45; }
+.ct tr:last-child td { border-bottom:none; }
+.ct td:first-child { font-size:13px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); }
+.va { color:var(--amber) !important; font-weight:700 !important; }
+.vb { color:var(--blue)  !important; font-weight:700 !important; }
+.vg { color:var(--green) !important; font-weight:700 !important; }
+.vr { color:var(--red)   !important; font-weight:500 !important; }
+
+
+/* ════════════ S09 — INTEGRACAO ════════════ */
+#s09 { flex-direction:row; }
+#s09 .left { flex:1; display:flex; flex-direction:column; justify-content:center; padding:68px 60px 68px 110px; }
+#s09 h2 { font-size:50px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; margin-bottom:30px; }
+#s09 .ly { display:flex; flex-direction:column; gap:12px; }
+#s09 .la { display:flex; align-items:flex-start; gap:20px; padding:22px 26px; border-radius:var(--r); }
+#s09 .lya { background:rgba(255,176,32,.08);  border:1px solid rgba(255,176,32,.32); }
+#s09 .lyb { background:rgba(91,156,248,.08);  border:1px solid rgba(91,156,248,.32); }
+#s09 .lyg { background:rgba(18,212,160,.08);  border:1px solid rgba(18,212,160,.32); }
+#s09 .lic { width:50px; height:50px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; letter-spacing:.04em; }
+#s09 .lia { background:rgba(255,176,32,.2); color:var(--amber); }
+#s09 .lib { background:rgba(91,156,248,.2); color:var(--blue); }
+#s09 .lig { background:rgba(18,212,160,.2); color:var(--green); }
+#s09 .lfl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; margin-bottom:4px; }
+#s09 .lfa { color:var(--amber); } .lfb { color:var(--blue); } .lfg { color:var(--green); }
+#s09 .lwh { font-size:21px; font-weight:700; color:var(--t1); margin-bottom:4px; }
+#s09 .lwo { font-size:15px; color:var(--t2); }
+#s09 .fn { margin-top:22px; padding:18px 22px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); }
+#s09 .fnl { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:10px; }
+#s09 .fnc { font-size:15px; color:var(--t2); line-height:1.7; }
+#s09 .fnc strong { color:var(--t1); font-weight:700; }
+#s09 .right { width:720px; display:flex; align-items:center; justify-content:center; border-left:1px solid var(--b1); background:var(--surf); padding:56px 52px; }
+.pw { display:flex; flex-direction:column; align-items:center; width:100%; }
+.pt { display:flex; align-items:center; justify-content:center; border-radius:var(--r); padding:24px 30px; text-align:center; }
+.pta { width:270px; background:rgba(255,176,32,.13); border:1.5px solid rgba(255,176,32,.38); }
+.ptb { width:420px; margin-top:9px; background:rgba(91,156,248,.13); border:1.5px solid rgba(91,156,248,.38); }
+.ptg { width:570px; margin-top:9px; background:rgba(18,212,160,.13); border:1.5px solid rgba(18,212,160,.38); }
+.pyn { font-size:21px; font-weight:800; margin-bottom:4px; }
+.pyl { font-size:14px; font-weight:400; }
+.pna { color:var(--amber); } .pla { color:rgba(255,176,32,.75); }
+.pnb { color:var(--blue); }  .plb { color:rgba(91,156,248,.75); }
+.png { color:var(--green); } .plg { color:rgba(18,212,160,.75); }
+.pyc { display:flex; flex-direction:column; align-items:center; height:20px; justify-content:center; }
+.pcl { width:2px; flex:1; }
+.pcla { background:rgba(255,176,32,.45); } .pclb { background:rgba(91,156,248,.45); }
+.pch { width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; }
+.pcha { border-top:10px solid rgba(255,176,32,.45); } .pchb { border-top:10px solid rgba(91,156,248,.45); }
+.pyleg { margin-top:26px; width:100%; padding:16px 20px; background:var(--card2); border:1px solid var(--b2); border-radius:var(--r2); }
+.pylegt { font-size:12px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:12px; }
+.pylegr { display:flex; align-items:center; gap:11px; margin-bottom:7px; font-size:14px; color:var(--t2); }
+.pylegr:last-child { margin-bottom:0; }
+.ld { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.lda { background:var(--amber); } .ldb { background:var(--blue); } .ldg { background:var(--green); }
+
+
+/* ════════════ S10 — CENARIO ════════════ */
+#s10 { flex-direction:column; }
+#s10 .tp { padding:48px 110px 26px; }
+#s10 h2 { font-size:46px; font-weight:800; color:var(--t1); letter-spacing:-.02em; margin-top:10px; }
+#s10 .ss { display:grid; grid-template-columns:1fr 52px 1fr 52px 1fr; padding:0 110px 50px; flex:1; align-items:center; }
+.stc { border-radius:12px; overflow:hidden; height:590px; display:flex; flex-direction:column; }
+.sth { padding:24px 28px; }
+.stn { font-size:13px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:8px; }
+.stf { font-size:30px; font-weight:800; letter-spacing:-.01em; }
+.stw { font-size:15px; opacity:.75; margin-top:5px; }
+.stb { padding:22px 26px; flex:1; background:rgba(0,0,0,.22); display:flex; flex-direction:column; gap:12px; }
+.sti { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; background:rgba(255,255,255,.05); border-radius:var(--r2); }
+.std { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.stl { font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }
+.stt { font-size:14px; color:rgba(200,218,238,.85); line-height:1.5; }
+.sca { background:linear-gradient(145deg,rgba(255,176,32,.15),rgba(255,176,32,.05)); border:1px solid rgba(255,176,32,.38); }
+.sca .sth { background:rgba(255,176,32,.12); }
+.sca .stf,.sca .stn { color:var(--amber); }
+.sca .std { background:var(--amber); }
+.sca .stl { color:var(--amber); }
+.scb { background:linear-gradient(145deg,rgba(91,156,248,.15),rgba(91,156,248,.05)); border:1px solid rgba(91,156,248,.38); }
+.scb .sth { background:rgba(91,156,248,.12); }
+.scb .stf,.scb .stn { color:var(--blue); }
+.scb .stl { color:var(--blue); }
+.scb .std { background:var(--blue); }
+.scg { background:linear-gradient(145deg,rgba(18,212,160,.15),rgba(18,212,160,.05)); border:1px solid rgba(18,212,160,.38); }
+.scg .sth { background:rgba(18,212,160,.12); }
+.scg .stf,.scg .stn { color:var(--green); }
+.scg .stl { color:var(--green); }
+.scg .std { background:var(--green); }
+.sc { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; }
+.scl { flex:1; width:2px; max-height:200px; }
+.sca2 { background:linear-gradient(to bottom,rgba(255,176,32,.45),rgba(91,156,248,.45)); }
+.scb2 { background:linear-gradient(to bottom,rgba(91,156,248,.45),rgba(18,212,160,.45)); }
+.scar { font-size:22px; color:var(--b2); }
+
+
+/* ════════════ S11 — CONCLUSAO ════════════ */
+#s11 { flex-direction:column; align-items:center; justify-content:center; }
+#s11 .in { max-width:1440px; width:100%; padding:0 110px; }
+#s11 .cp { font-size:14px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:var(--t3); margin-bottom:26px; }
+#s11 h2 { font-size:70px; font-weight:800; color:var(--t1); letter-spacing:-.03em; line-height:1.0; margin-bottom:44px; }
+#s11 h2 span { color:var(--blue); }
+#s11 .ls { display:flex; flex-direction:column; gap:12px; margin-bottom:40px; }
+#s11 .cl { display:flex; align-items:flex-start; gap:20px; padding:20px 26px; background:var(--card); border:1px solid var(--b1); border-radius:var(--r); }
+#s11 .clb { flex-shrink:0; margin-top:2px; }
+#s11 .clt { font-size:21px; color:var(--t1); font-weight:400; line-height:1.4; }
+#s11 .th { padding:26px 30px; background:rgba(91,156,248,.08); border:1px solid rgba(91,156,248,.3); border-radius:var(--r); }
+#s11 .thl { font-size:12px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; color:var(--blue); margin-bottom:10px; }
+#s11 .tht { font-size:25px; color:var(--t1); font-weight:500; line-height:1.4; }
+#s11 .qn { margin-top:22px; font-size:15px; color:var(--t4); text-align:center; letter-spacing:.06em; }
+</style>
+</head>
+<body>
+
+<div id="pbt"><div id="pbf"></div></div>
+
+<div id="rh">
+  <svg width="56" height="56" viewBox="0 0 56 56" fill="none"><rect x="8" y="4" width="30" height="48" rx="4" stroke="#C8DAEE" stroke-width="2"/><path d="M46 26L54 34M46 26L38 34M46 26C46 16 36 8 24 8" stroke="#C8DAEE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div style="color:var(--t1);font-weight:700;font-size:22px;">Gire o dispositivo</div>
+  <div>A apresentacao e otimizada para modo paisagem</div>
+</div>
+
+<div id="deck">
+
+<!-- ═════ S01 — CAPA ═════ -->
+<section class="slide active gbg" id="s01">
+  <div class="acc-multi"></div>
+  <div class="main">
+    <div class="inst">Universidade do Sul de Santa Catarina — UNISUL &nbsp;·&nbsp; Sistemas de Informacao — 5 Periodo</div>
+    <h1>Governanca<br>de <span>TI</span></h1>
+    <div class="sub">Analise Comparativa: COBIT 2019, ITIL 4 e ISO/IEC 38500<br>Como frameworks complementares constroem governanca robusta</div>
+    <div class="mbrs">
+      <div class="mbr"><div class="mid">M1</div><div class="mn">Coordenador — Introducao e Conclusao</div></div>
+      <div class="mbr"><div class="mid">M2</div><div class="mn">Especialista — COBIT 2019</div></div>
+      <div class="mbr"><div class="mid">M3</div><div class="mn">Especialista — ITIL 4</div></div>
+      <div class="mbr"><div class="mid">M4</div><div class="mn">Especialista — ISO/IEC 38500</div></div>
+      <div class="mbr"><div class="mid">M5</div><div class="mn">Analista — Matriz Comparativa</div></div>
+      <div class="mbr"><div class="mid">M6</div><div class="mn">Integracao e Cenario Pratico</div></div>
+    </div>
+    <div class="meta">Disciplina: Governanca e Servicos de TI &nbsp;·&nbsp; Avaliacao A3 — Seminario &nbsp;·&nbsp; 2026</div>
+  </div>
+  <div class="sidebar">
+    <div class="stripe sfa"><div class="sdot" style="background:var(--amber)"></div><div class="slbl" style="color:var(--amber)">ISO 38500</div></div>
+    <div class="stripe sfb"><div class="sdot" style="background:var(--blue)"></div><div class="slbl" style="color:var(--blue)">COBIT 2019</div></div>
+    <div class="stripe sfg"><div class="sdot" style="background:var(--green)"></div><div class="slbl" style="color:var(--green)">ITIL 4</div></div>
+  </div>
+</section>
+
+<!-- ═════ S02 — PROBLEMA ═════ -->
+<section class="slide" id="s02">
+  <div class="acc-multi"></div>
+  <div class="left">
+    <div class="ey ey-b">Contexto — M1</div>
+    <h2>Por que frameworks de governanca existem?</h2>
+    <div class="pts">
+      <div class="pt"><div class="pn">01</div><div><div class="ptit">TI como caixa-preta isolada</div><div class="pdsc">Nos anos 60–80, os CPDs operavam sem prestacao de contas ao negocio. TI era custo, nao ativo estrategico. Decisoes tecnologicas nao refletiam objetivos corporativos.</div></div></div>
+      <div class="pt"><div class="pn">02</div><div><div class="ptit">Escandalos corporativos e SOX (2002)</div><div class="pdsc">Enron e WorldCom expuseram falhas sistemicas de controle interno. A Lei Sarbanes-Oxley obrigou organizacoes a demonstrar controles de TI auditaveis como exigencia legal.</div></div></div>
+      <div class="pt"><div class="pn">03</div><div><div class="ptit">Gap estrategico persistente</div><div class="pdsc">Mesmo com TI avancada, o negocio nao enxerga o valor entregue. Sem governanca estruturada, nao ha alinhamento entre objetivos corporativos e execucao tecnologica.</div></div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="gd">
+      <div class="gdb gdt"><div class="gdn" style="color:var(--amber)">Negocio</div><div class="gds">Metas, estrategia, valor ao acionista</div></div>
+      <div class="gdgap"><div class="gdgl">Gap Estrategico</div></div>
+      <div class="gdb gdb2"><div class="gdn" style="color:var(--blue)">TI</div><div class="gds">Infraestrutura, sistemas, operacao</div></div>
+      <div class="gdsol"><div class="gdsl">Solucao</div><div class="gdst">Frameworks de governanca como ponte estruturada</div></div>
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;"><span class="tag tag-a">ISO 38500</span><span class="tag tag-b">COBIT 2019</span><span class="tag tag-g">ITIL 4</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ S03 — VISAO GERAL ═════ -->
+<section class="slide" id="s03">
+  <div class="acc-multi"></div>
+  <div class="tp"><div class="ey ey-m">Visao Geral — M1</div><h2>Tres frameworks. Tres camadas. Uma governanca.</h2></div>
+  <div class="cs">
+    <div class="fwc"><div class="fwcs sa"></div><div class="fwct"><span class="tag tag-a">ISO/IEC 38500</span><div class="fwcn" style="color:var(--amber)">ISO 38500</div><div class="fwcf">Information technology — Governance of IT for the organization (2015)</div><div class="fwcfl" style="color:var(--amber)">Foco central</div><div class="fwcfv">Governanca corporativa de TI para o board</div><div class="fwcal">Publico-alvo</div><div class="fwcav">Conselho de Administracao, CEO, Alta Diretoria</div></div><div class="fwcb"><div class="fwcbr"><div class="fwcst" style="color:var(--amber)">6 principios + ciclo EDM</div><span class="tag tag-a">Estrategico</span></div></div></div>
+    <div class="fwc"><div class="fwcs sb"></div><div class="fwct"><span class="tag tag-b">COBIT 2019</span><div class="fwcn" style="color:var(--blue)">COBIT 2019</div><div class="fwcf">Control Objectives for Information and Related Technologies — ISACA (2018)</div><div class="fwcfl" style="color:var(--blue)">Foco central</div><div class="fwcfv">Governanca e gestao de TI com controles mensuraveis</div><div class="fwcal">Publico-alvo</div><div class="fwcav">CIO, gestores de TI, auditores, risk officers</div></div><div class="fwcb"><div class="fwcbr"><div class="fwcst" style="color:var(--blue)">5 dominios + 40 objetivos</div><span class="tag tag-b">Tatico</span></div></div></div>
+    <div class="fwc"><div class="fwcs sg"></div><div class="fwct"><span class="tag tag-g">ITIL 4</span><div class="fwcn" style="color:var(--green)">ITIL 4</div><div class="fwcf">IT Infrastructure Library, 4a edicao — AXELOS (2019)</div><div class="fwcfl" style="color:var(--green)">Foco central</div><div class="fwcfv">Gerenciamento de servicos de TI e entrega de valor</div><div class="fwcal">Publico-alvo</div><div class="fwcav">Equipes de TI, service managers, analistas de suporte</div></div><div class="fwcb"><div class="fwcbr"><div class="fwcst" style="color:var(--green)">SVS + 34 praticas</div><span class="tag tag-g">Operacional</span></div></div></div>
+  </div>
+</section>
+
+<!-- ═════ S04 — COBIT PRINCIPIOS + CASCATA ═════ -->
+<section class="slide" id="s04">
+  <div class="acc-blue"></div>
+  <div class="left">
+    <div class="ey ey-b">COBIT 2019 — M2</div>
+    <h2>6 Principios do Sistema de Governanca</h2>
+    <div class="prl">
+      <div class="pr"><div class="prn">P1</div><div class="prv">Fornecer Valor as Partes Interessadas</div></div>
+      <div class="pr"><div class="prn">P2</div><div class="prv">Abordagem Holistica com 7 Componentes</div></div>
+      <div class="pr"><div class="prn">P3</div><div class="prv">Sistema Dinamico</div></div>
+      <div class="pr"><div class="prn">P4</div><div class="prv">Governanca Distinta da Gestao</div></div>
+      <div class="pr"><div class="prn">P5</div><div class="prv">Adaptado as Necessidades da Organizacao</div></div>
+      <div class="pr"><div class="prn">P6</div><div class="prv">Sistema de Ponta a Ponta</div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div style="width:100%">
+      <div style="font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;">Cascata de Objetivos — ISACA</div>
+      <div class="ca">
+        <div class="cab c1"><div class="cat">Necessidades das Partes Interessadas</div><div class="cas">Crescimento, rentabilidade, conformidade, satisfacao</div></div>
+        <div class="caa"><div class="cal"></div><div class="cah"></div></div>
+        <div class="cab c2"><div class="cat">Metas Corporativas — Enterprise Goals (EG)</div><div class="cas">17 objetivos que traduzem necessidades em metas da organizacao</div></div>
+        <div class="caa"><div class="cal"></div><div class="cah"></div></div>
+        <div class="cab c3"><div class="cat">Metas de Alinhamento — Alignment Goals (AG)</div><div class="cas">Objetivos especificos de TI que suportam as metas corporativas</div></div>
+        <div class="caa"><div class="cal"></div><div class="cah"></div></div>
+        <div class="cab c4"><div class="cat">40 Objetivos de Governanca e Gestao</div><div class="cas">EDM (5) + APO (14) + BAI (11) + DSS (6) + MEA (4)</div></div>
+        <div class="caeg">
+          <div class="caeg-l">Exemplo — trilha completa (Aula 7)</div>
+          <div class="caeg-r"><strong>Necessidade:</strong> Crescimento economico do acionista</div>
+          <div class="caeg-r"><strong>EG01:</strong> Portfolio de Produtos e Servicos Competitivos</div>
+          <div class="caeg-r"><strong>AG05:</strong> Entrega de Programas com Prazos e Custos Adequados</div>
+          <div class="caeg-r"><strong>APO09:</strong> Gerenciar Acordos de Nivel de Servico (SLAs)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ S05 — COBIT DOMINIOS ═════ -->
+<section class="slide" id="s05">
+  <div class="acc-blue"></div>
+  <div class="tp"><div class="ey ey-b">COBIT 2019 — M2</div><h2>Os 5 Dominios e os 40 Objetivos de Controle</h2></div>
+  <div class="dw">
+    <div class="ds">
+      <div class="dom domg"><span class="dtag dtg">Governanca</span><div class="dn">EDM</div><div class="df">Avaliar, Dirigir e Monitorar</div><div class="dc">5</div><div class="do">objetivos</div></div>
+      <div class="dom domm"><span class="dtag dtm">Gestao</span><div class="dn">APO</div><div class="df">Alinhar, Planejar e Organizar</div><div class="dc">14</div><div class="do">objetivos</div></div>
+      <div class="dom domm"><span class="dtag dtm">Gestao</span><div class="dn">BAI</div><div class="df">Construir, Adquirir e Implementar</div><div class="dc">11</div><div class="do">objetivos</div></div>
+      <div class="dom domm"><span class="dtag dtm">Gestao</span><div class="dn">DSS</div><div class="df">Entregar, Servir e Suportar</div><div class="dc">6</div><div class="do">objetivos</div></div>
+      <div class="dom domm"><span class="dtag dtm">Gestao</span><div class="dn">MEA</div><div class="df">Monitorar, Avaliar e Analisar</div><div class="dc">4</div><div class="do">objetivos</div></div>
+    </div>
+  </div>
+  <div class="pc">
+    <div class="pi"><div class="pl">P</div><div><div class="pp">Plan</div><div class="pd">APO — Planejar e alinhar com o negocio</div></div></div>
+    <div class="pi"><div class="pl">D</div><div><div class="pp">Do</div><div class="pd">BAI — Construir, adquirir e implementar</div></div></div>
+    <div class="pi"><div class="pl">D</div><div><div class="pp">Do / Run</div><div class="pd">DSS — Entregar servicos e suportar operacoes</div></div></div>
+    <div class="pi"><div class="pl">C</div><div><div class="pp">Check &amp; Act</div><div class="pd">MEA — Monitorar, avaliar e analisar resultados</div></div></div>
+  </div>
+</section>
+
+<!-- ═════ S06 — ITIL 4 ═════ -->
+<section class="slide" id="s06">
+  <div class="acc-green"></div>
+  <div class="left">
+    <div class="ey ey-g">ITIL 4 — M3</div>
+    <h2>Sistema de Valor de Servico (SVS)</h2>
+    <div class="sl">5 Componentes do SVS</div>
+    <div class="si">
+      <div class="sii"><div class="sin">01</div><div class="sit">Cadeia de Valor de Servico (SVC) — 6 atividades</div></div>
+      <div class="sii"><div class="sin">02</div><div class="sit">34 Praticas de Gerenciamento</div></div>
+      <div class="sii"><div class="sin">03</div><div class="sit">7 Principios Orientadores</div></div>
+      <div class="sii"><div class="sin">04</div><div class="sit">Governanca</div></div>
+      <div class="sii"><div class="sin">05</div><div class="sit">Melhoria Continua</div></div>
+    </div>
+    <div class="br">
+      <div class="brl">Conexao com o COBIT</div>
+      <div class="brt">O objetivo <strong>DSS02</strong> do COBIT (Gerenciar Requisicoes e Incidentes) mapeia diretamente para a pratica de <strong>Gestao de Incidentes</strong> do ITIL 4. O COBIT define o objetivo de controle; o ITIL fornece o processo detalhado de execucao.</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="pw">
+      <div class="p7l">7 Principios Orientadores do ITIL 4</div>
+      <div class="p7">
+        <div class="p7i"><div class="p7n">01</div><div class="p7t">Foco no Valor</div></div>
+        <div class="p7i"><div class="p7n">02</div><div class="p7t">Comece Onde Voce Esta</div></div>
+        <div class="p7i"><div class="p7n">03</div><div class="p7t">Avance Iterativamente com Feedback</div></div>
+        <div class="p7i"><div class="p7n">04</div><div class="p7t">Colabore e Promova Visibilidade</div></div>
+        <div class="p7i"><div class="p7n">05</div><div class="p7t">Pense e Trabalhe de Forma Holistica</div></div>
+        <div class="p7i"><div class="p7n">06</div><div class="p7t">Mantenha Simples e Pratico</div></div>
+        <div class="p7i"><div class="p7n">07</div><div class="p7t">Otimize e Automatize</div></div>
+      </div>
+      <div class="prc"><div class="prl">4 Praticas Essenciais</div><div class="prt"><span class="tag tag-g">Gestao de Incidentes</span><span class="tag tag-g">Gestao de Problemas</span><span class="tag tag-g">Controle de Mudancas</span><span class="tag tag-g">Service Desk</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ S07 — ISO 38500 ═════ -->
+<section class="slide" id="s07">
+  <div class="acc-amber"></div>
+  <div class="left">
+    <div class="ey ey-a">ISO/IEC 38500 — M4</div>
+    <h2>A Norma do Board</h2>
+    <div class="fn">Governance of IT for the organization — Principios para o Conselho de Administracao e Alta Diretoria</div>
+    <div class="p6">
+      <div class="p6i"><div class="p6n">P1</div><div><div class="p6nm">Responsabilidade</div><div class="p6ds">Papeis sobre o uso de TI sao claros e aceitos por todos na organizacao</div></div></div>
+      <div class="p6i"><div class="p6n">P2</div><div><div class="p6nm">Estrategia</div><div class="p6ds">A estrategia de TI suporta e habilita a estrategia de negocios</div></div></div>
+      <div class="p6i"><div class="p6n">P3</div><div><div class="p6nm">Aquisicao</div><div class="p6ds">Aquisicoes de TI sao feitas com razoes validas e decisao baseada em analise correta</div></div></div>
+      <div class="p6i"><div class="p6n">P4</div><div><div class="p6nm">Desempenho</div><div class="p6ds">TI e adequada para suportar a organizacao e entregar os servicos necessarios</div></div></div>
+      <div class="p6i"><div class="p6n">P5</div><div><div class="p6nm">Conformidade</div><div class="p6ds">TI cumpre todas as legislacoes, regulamentacoes e politicas internas aplicaveis</div></div></div>
+      <div class="p6i"><div class="p6n">P6</div><div><div class="p6nm">Comportamento Humano</div><div class="p6ds">Politicas de TI respeitam o comportamento e as necessidades de todas as pessoas</div></div></div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="ew">
+      <div class="el">Ciclo de Atuacao Diretiva — Modelo EDM</div>
+      <div class="ens">
+        <div class="en"><div class="enn">AVALIAR</div><div class="end">Analisa opcoes e riscos atuais e futuros para a organizacao</div></div>
+        <div class="en"><div class="enn">DIRIGIR</div><div class="end">Emite estrategias, politicas e planos de acao para a gestao</div></div>
+        <div class="eco"><span></span><span></span></div>
+        <div class="enf"><div class="en enc"><div class="enn">MONITORAR</div><div class="end">Verifica conformidade e metricas de desempenho (KPIs)</div></div></div>
+      </div>
+    </div>
+    <div class="inn">
+      <div class="inl">Relacao com o COBIT 2019</div>
+      <div class="int"><strong>ISO 38500</strong> define o "por que" e os principios que o board deve seguir. O dominio <strong>EDM do COBIT</strong> operacionaliza esses principios com objetivos de controle mensuraveis. Mesma nomenclatura — niveis distintos de atuacao.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ S08 — COMPARATIVO ═════ -->
+<section class="slide" id="s08">
+  <div class="acc-multi"></div>
+  <div class="tp"><div class="ey ey-m">Analise Comparativa — M5</div><h2>Matriz de Complementaridade</h2></div>
+  <div class="tw">
+    <table class="ct">
+      <thead>
+        <tr><th>Criterio</th><th class="tha">ISO/IEC 38500</th><th class="thb">COBIT 2019</th><th class="thg">ITIL 4</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Foco Principal</td><td class="va">Governanca corporativa de TI</td><td class="vb">Governanca e gestao de TI (controles)</td><td class="vg">Gerenciamento de servicos e valor</td></tr>
+        <tr><td>Publico-Alvo</td><td>Conselho de Administracao, CEO</td><td>CIO, auditores, gestores de TI</td><td>Equipes de TI, service managers</td></tr>
+        <tr><td>Nivel de Detalhe</td><td>Baixo — apenas diretrizes e principios</td><td>Alto — 40 objetivos, praticas, KPIs</td><td>Alto — 34 praticas, SVC 6 atividades</td></tr>
+        <tr><td>Abordagem</td><td>6 principios eticos e estrategicos</td><td>Processos de controle auditaveis</td><td>Praticas orientadas a valor e iteracao</td></tr>
+        <tr><td>Estrutura</td><td>Ciclo EDM (Avaliar, Dirigir, Monitorar)</td><td>5 dominios: EDM, APO, BAI, DSS, MEA</td><td>SVS + SVC (6 atividades) + 34 praticas</td></tr>
+        <tr><td>Certificacao</td><td style="color:var(--t3)">Nao possui certificacao formal</td><td>ISACA — Foundation, Design, Impl.</td><td>PeopleCert — Foundation, Managing Pro.</td></tr>
+        <tr><td>Lacuna se Isolado</td><td class="vr">Sem processos nem metricas praticas</td><td class="vr">Nao detalha execucao de servicos no campo</td><td class="vr">Sem elo estrategico com o board</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═════ S09 — INTEGRACAO ═════ -->
+<section class="slide" id="s09">
+  <div class="acc-multi"></div>
+  <div class="left">
+    <div class="ey ey-m">Integracao — M6</div>
+    <h2>O Modelo de Camadas</h2>
+    <div class="ly">
+      <div class="la lya"><div class="lic lia">ISO</div><div><div class="lfl lfa">ISO/IEC 38500</div><div class="lwh">O que esperar — o porque</div><div class="lwo">Board, Conselho de Administracao — nivel estrategico e diretivo</div></div></div>
+      <div class="la lyb"><div class="lic lib">COB</div><div><div class="lfl lfb">COBIT 2019</div><div class="lwh">O que controlar e mensurar</div><div class="lwo">CIO, gestores de TI, auditores — nivel tatico e de controle</div></div></div>
+      <div class="la lyg"><div class="lic lig">ITIL</div><div><div class="lfl lfg">ITIL 4</div><div class="lwh">Como executar com eficiencia</div><div class="lwo">Equipes de TI, service managers — nivel operacional</div></div></div>
+    </div>
+    <div class="fn">
+      <div class="fnl">Exemplo de Fluxo — Principio de Conformidade</div>
+      <div class="fnc"><strong>ISO 38500 — "Conformidade"</strong> define a diretriz de board<br><strong>COBIT — MEA03</strong> operacionaliza o controle de conformidade regulatoria<br><strong>ITIL — Controle de Mudancas</strong> executa e documenta cada alteracao</div>
+    </div>
+  </div>
+  <div class="right">
+    <div style="display:flex;flex-direction:column;align-items:center;width:100%;">
+      <div style="font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);margin-bottom:22px;text-align:center;">Piramide de Governanca Integrada</div>
+      <div class="pw">
+        <div class="pt pta"><div><div class="pyn pna">ISO 38500</div><div class="pyl pla">Board — Estrategico</div></div></div>
+        <div class="pyc"><div class="pcl pcla"></div><div class="pch pcha"></div></div>
+        <div class="pt ptb"><div><div class="pyn pnb">COBIT 2019</div><div class="pyl plb">Gestao — Tatico</div></div></div>
+        <div class="pyc"><div class="pcl pclb"></div><div class="pch pchb"></div></div>
+        <div class="pt ptg"><div><div class="pyn png">ITIL 4</div><div class="pyl plg">Operacao — Executivo</div></div></div>
+      </div>
+      <div class="pyleg">
+        <div class="pylegt">Logica da complementaridade</div>
+        <div class="pylegr"><div class="ld lda"></div><span>ISO 38500 define o "por que" — principios e diretrizes do board</span></div>
+        <div class="pylegr"><div class="ld ldb"></div><span>COBIT define o "o que" — controles, metricas e objetivos de gestao</span></div>
+        <div class="pylegr"><div class="ld ldg"></div><span>ITIL define o "como" — praticas de servico e execucao operacional</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ S10 — CENARIO ═════ -->
+<section class="slide" id="s10">
+  <div class="acc-multi"></div>
+  <div class="tp"><div class="ey ey-m">Cenario Pratico — M6</div><h2>Empresa de tecnologia busca contrato internacional exigente em conformidade</h2></div>
+  <div class="ss">
+    <div class="stc sca">
+      <div class="sth"><div class="stn">Etapa 01</div><div class="stf">ISO 38500</div><div class="stw">Board e Alta Diretoria</div></div>
+      <div class="stb">
+        <div class="sti"><div class="std"></div><div><div class="stl">Principio Conformidade</div><div class="stt">Conselho aprova diretriz estrategica de conformidade e seguranca para viabilizar o contrato</div></div></div>
+        <div class="sti"><div class="std"></div><div><div class="stl">Principio Estrategia</div><div class="stt">TI e alinhada formalmente a meta de expansao e exigencias do cliente corporativo internacional</div></div></div>
+        <div class="sti"><div class="std"></div><div><div class="stl">Ciclo EDM</div><div class="stt">Board avalia o risco, dirige as areas responsaveis e define KPIs de monitoramento continuado</div></div></div>
+      </div>
+    </div>
+    <div class="sc"><div class="scl sca2"></div><div class="scar">&#8595;</div><div class="scl sca2"></div></div>
+    <div class="stc scb">
+      <div class="sth"><div class="stn">Etapa 02</div><div class="stf">COBIT 2019</div><div class="stw">Gestao de TI — CIO e equipe tatica</div></div>
+      <div class="stb">
+        <div class="sti"><div class="std"></div><div><div class="stl">APO12 — Gestao de Riscos</div><div class="stt">Mapeamento e priorizacao dos riscos criticos para o contrato com apetite de risco definido</div></div></div>
+        <div class="sti"><div class="std"></div><div><div class="stl">APO13 — Gestao de Seguranca</div><div class="stt">Definicao de controles de seguranca da informacao e plano de tratamento de vulnerabilidades</div></div></div>
+        <div class="sti"><div class="std"></div><div><div class="stl">Cascata de Objetivos</div><div class="stt">Desdobramento das metas do board em objetivos de gestao e metricas de desempenho mensuraveis</div></div></div>
+      </div>
+    </div>
+    <div class="sc"><div class="scl scb2"></div><div class="scar">&#8595;</div><div class="scl scb2"></div></div>
+    <div class="stc scg">
+      <div class="sth"><div class="stn">Etapa 03</div><div class="stf">ITIL 4</div><div class="stw">Operacao de TI — equipes de servico</div></div>
+      <div class="stb">
+        <div class="sti"><div class="std"></div><div><div class="stl">Service Desk Reestruturado</div><div class="stt">Central de servicos reformulada com procedimentos, SLAs e equipes alinhadas ao contrato</div></div></div>
+        <div class="sti"><div class="std"></div><div><div class="stl">Gestao de Incidentes</div><div class="stt">Processos de resposta rapida com rastreabilidade total e comunicacao estruturada ao cliente</div></div></div>
+        <div class="sti"><div class="std"></div><div><div class="stl">Controle de Mudancas</div><div class="stt">Cada alteracao de infraestrutura documentada, aprovada e rastreavel — auditoria habilitada</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ S11 — CONCLUSAO ═════ -->
+<section class="slide" id="s11">
+  <div class="acc-multi"></div>
+  <div class="in">
+    <div class="cp">Conclusao — M1</div>
+    <h2>Robustez nao vem do melhor framework.<br>Vem da <span>integracao</span> dos tres.</h2>
+    <div class="ls">
+      <div class="cl"><div class="clb"><span class="tag tag-a">ISO 38500</span></div><div class="clt">O board define o "por que": principios, conformidade e direcao estrategica da TI na organizacao.</div></div>
+      <div class="cl"><div class="clb"><span class="tag tag-b">COBIT 2019</span></div><div class="clt">A gestao define o "o que": 40 objetivos de controle que traduzem estrategia em metas mensuraveis.</div></div>
+      <div class="cl"><div class="clb"><span class="tag tag-g">ITIL 4</span></div><div class="clt">A operacao define o "como": praticas de servico que entregam valor real ao usuario final todos os dias.</div></div>
+    </div>
+    <div class="th">
+      <div class="thl">Tese Central do Projeto</div>
+      <div class="tht">Governanca bem-sucedida protege o valor do acionista na mesma medida em que empodera o analista de suporte tecnico em seu cotidiano operacional. Os tres frameworks sao complementares — nao concorrentes.</div>
+    </div>
+    <div class="qn">Governanca e Servicos de TI — UNISUL 2026 &nbsp;·&nbsp; Perguntas abertas</div>
+  </div>
+</section>
+
+</div><!-- #deck -->
+
+<div id="nav">
+  <button class="nbtn" id="btnPrev" disabled>&#8592;</button>
+  <div id="dots"></div>
+  <button class="nbtn" id="btnNext">&#8594;</button>
+  <div id="ctr">1 / 11</div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var slides   = Array.from(document.querySelectorAll('.slide'));
+  var TOTAL    = slides.length;
+  var cur      = 0;
+  var busy     = false;
+
+  var pbf     = document.getElementById('pbf');
+  var ctrEl   = document.getElementById('ctr');
+  var dotsEl  = document.getElementById('dots');
+  var btnPrev = document.getElementById('btnPrev');
+  var btnNext = document.getElementById('btnNext');
+
+  /* Build dot indicators */
+  function buildDots() {
+    dotsEl.innerHTML = '';
+    for (var i = 0; i < TOTAL; i++) {
+      (function(idx) {
+        var d = document.createElement('div');
+        d.className = 'dot' + (idx === 0 ? ' on' : '');
+        d.addEventListener('click', function () { goTo(idx); });
+        dotsEl.appendChild(d);
+      })(i);
+    }
+  }
+
+  /* Scale 1920x1080 canvas to fit viewport */
+  function scaleDeck() {
+    var deck = document.getElementById('deck');
+    var sx = window.innerWidth  / 1920;
+    var sy = window.innerHeight / 1080;
+    var s  = Math.min(sx, sy);
+    var ox = (window.innerWidth  - 1920 * s) / 2;
+    var oy = (window.innerHeight - 1080 * s) / 2;
+    deck.style.transform = 'translate(' + ox + 'px, ' + oy + 'px) scale(' + s + ')';
+  }
+
+  /* Sync all UI chrome to current slide index */
+  function syncUI() {
+    /* Progress bar fill width = fraction of deck completed */
+    pbf.style.width = ((cur + 1) / TOTAL * 100) + '%';
+
+    /* Slide counter */
+    ctrEl.textContent = (cur + 1) + ' / ' + TOTAL;
+
+    /* Prev/next buttons */
+    btnPrev.disabled = (cur === 0);
+    btnNext.disabled = (cur === TOTAL - 1);
+
+    /* Dots */
+    var dots = dotsEl.querySelectorAll('.dot');
+    for (var i = 0; i < dots.length; i++) {
+      if (i === cur) { dots[i].classList.add('on'); }
+      else           { dots[i].classList.remove('on'); }
+    }
+  }
+
+  /* Navigate to slide n */
+  function goTo(n) {
+    if (n < 0 || n >= TOTAL || n === cur || busy) return;
+    busy = true;
+
+    var oldEl = slides[cur];
+    var newEl = slides[n];
+
+    /* Animate out old, animate in new */
+    oldEl.classList.remove('active');
+    oldEl.classList.add('exit');
+
+    newEl.classList.remove('exit');
+    newEl.classList.add('active');
+
+    cur = n;
+    syncUI();
+
+    /* Remove exit class after transition ends */
+    setTimeout(function () {
+      oldEl.classList.remove('exit');
+      busy = false;
+    }, 360);
+
+    try { localStorage.setItem('gti-pos', String(cur)); } catch (e) {}
+  }
+
+  /* Button clicks */
+  btnPrev.addEventListener('click', function () { goTo(cur - 1); });
+  btnNext.addEventListener('click', function () { goTo(cur + 1); });
+
+  /* Keyboard navigation */
+  window.addEventListener('keydown', function (e) {
+    switch (e.key) {
+      case 'ArrowRight': case ' ':   e.preventDefault(); goTo(cur + 1); break;
+      case 'ArrowLeft':              e.preventDefault(); goTo(cur - 1); break;
+      case 'Home':                   e.preventDefault(); goTo(0);       break;
+      case 'End':                    e.preventDefault(); goTo(TOTAL-1); break;
+    }
+  });
+
+  /* Touch swipe */
+  var tx = 0;
+  document.addEventListener('touchstart', function (e) { tx = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 55) goTo(cur + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  /* Resize */
+  window.addEventListener('resize', scaleDeck);
+
+  /* Bootstrap */
+  buildDots();
+  scaleDeck();
+  syncUI();
+
+  /* Restore last slide */
+  try {
+    var saved = parseInt(localStorage.getItem('gti-pos') || '0', 10);
+    if (!isNaN(saved) && saved > 0 && saved < TOTAL) goTo(saved);
+  } catch (e) {}
+
+})();
+</script>
+</body>
+</html>
