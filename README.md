@@ -2,6 +2,7 @@
 
 > Análise comparativa dos principais frameworks de governança e gestão de TI, demonstrando como utilizá-los de forma complementar para construir um sistema de governança robusto.
 
+
 **Disciplina:** Governança e Serviços de TI — UNISUL · Sistemas de Informação  
 **Avaliação:** A3 — Seminário 
 **Formato:** Documento técnico + Apresentação de 10 minutos  
